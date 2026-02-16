@@ -75,3 +75,41 @@
 
 - Focused mostly on equipment
 - Less suitable for small farmers
+
+---
+
+# 2️⃣ Feature Comparison Table
+
+| Feature              | Climate FieldView | CropX | John Deere | Smart Agriculture Platform |
+| -------------------- | ----------------- | ----- | ---------- | -------------------------- |
+| Weather Tracking     | ✅                | ✅    | ❌         | ✅                         |
+| Soil Monitoring      | ❌                | ✅    | ❌         | ✅                         |
+| Market Price Updates | ❌                | ❌    | ❌         | ✅                         |
+| Crop Recommendation  | ❌                | ❌    | ❌         | ✅                         |
+| Farmer Community     | ❌                | ❌    | ❌         | ✅                         |
+| Beginner Friendly UI | ❌                | ✅    | ❌         | ✅                         |
+
+---
+
+# 3️⃣ Key Observations
+
+- Most platforms focus on large-scale commercial farms.
+- Very few platforms provide real-time market price transparency.
+- Community support features are missing.
+- Many systems are complex and not beginner-friendly.
+- Our Smart Agriculture Platform will focus on simplicity, accessibility, and smart decision-making tools for small and medium farmers.
+
+---
+
+# ✅ Conclusion
+
+Through competitor analysis, we identified several gaps in existing agriculture platforms.  
+Our Smart Agriculture Platform will differentiate itself by providing:
+
+- Simple and clean UI
+- Real-time market price updates
+- Crop recommendation system
+- Farmer community support
+- Smart irrigation and weather alerts
+
+This research helps define our unique direction and competitive advantage.
