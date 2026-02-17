@@ -113,3 +113,13 @@ Our Smart Agriculture Platform will differentiate itself by providing:
 - Smart irrigation and weather alerts
 
 This research helps define our unique direction and competitive advantage.
+
+---
+
+# 3️⃣ Wireframes
+
+### Homepage Wireframe
+
+Includes: Hero, Problems, Features, How it works, Dashboard preview, Crop spotlight, Market preview, Benefits, CTA.
+
+
