@@ -122,4 +122,6 @@ This research helps define our unique direction and competitive advantage.
 
 Includes: Hero, Problems, Features, How it works, Dashboard preview, Crop spotlight, Market preview, Benefits, CTA.
 
+### Dashboard Wireframe
 
+Includes: Summary cards, Weather widget, Market overview, Forecast chart, Tasks, Analytics, Recommendations, Irrigation alerts.
