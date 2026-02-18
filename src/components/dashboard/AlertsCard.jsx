@@ -1,6 +1,7 @@
 import React from 'react';
 import SectionCard from '../ui/SectionCard';
 import { alerts } from '@/data/dashboardSample';
+import Button from '../ui/Button';
 const AlertsCard = () => {
     return (
         <SectionCard title="Alerts">
@@ -9,6 +10,9 @@ const AlertsCard = () => {
           <li key={i}>⚠ {alert}</li>
         ))}
       </ul>
+      <div className="flex justify-end">
+        <Button>View Details</Button>
+      </div>
     </SectionCard>
     );
 };

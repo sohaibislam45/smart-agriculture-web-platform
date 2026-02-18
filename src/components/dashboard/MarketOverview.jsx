@@ -1,6 +1,7 @@
 import React from 'react';
 import SectionCard from '../ui/SectionCard';
 import { marketPrices } from '@/data/dashboardSample';
+import Button from '../ui/Button';
 const MarketOverview = () => {
     return (
          <SectionCard title="Market Prices">
@@ -20,6 +21,9 @@ const MarketOverview = () => {
           ))}
         </tbody>
       </table>
+      <div className="flex justify-end">
+        <Button>View Details</Button>
+      </div>
     </SectionCard>
     );
 };
