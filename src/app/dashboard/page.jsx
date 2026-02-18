@@ -2,6 +2,7 @@ import React from "react";
 import StatCard from "@/components/ui/StarCard";
 import WeatherCard from "@/components/dashboard/WeatherCard";
 import TasksCard from "@/components/dashboard/TasksCard";
+import MarketOverview from "@/components/dashboard/MarketOverview";
 const page = () => {
   return (
     <div className="p-4 md:p-6 space-y-6 bg-gray-50 min-h-screen">
@@ -19,7 +20,7 @@ const page = () => {
       {/* MAIN GRID */}
       <section className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         <WeatherCard />
-        <div className="bg-white p-4 rounded-xl shadow-sm" />
+       <MarketOverview></MarketOverview>
       </section>
 
       {/* SECONDARY GRID */}
