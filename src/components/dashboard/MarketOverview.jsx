@@ -21,7 +21,7 @@ const MarketOverview = () => {
           ))}
         </tbody>
       </table>
-      <div className="flex justify-end">
+      <div className="flex justify-end mt-5">
         <Button>View Details</Button>
       </div>
     </SectionCard>

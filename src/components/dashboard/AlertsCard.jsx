@@ -10,7 +10,7 @@ const AlertsCard = () => {
           <li key={i}>⚠ {alert}</li>
         ))}
       </ul>
-      <div className="flex justify-end">
+      <div className="flex justify-end mt-5">
         <Button>View Details</Button>
       </div>
     </SectionCard>
