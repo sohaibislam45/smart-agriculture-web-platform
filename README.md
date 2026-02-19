@@ -16,6 +16,7 @@ It serves as the primary reference document for developers, project managers, st
 The Smart Agriculture Platform is a web-based system designed to digitally transform traditional farming practices by integrating real-time data, AI-based recommendations, financial tracking, and direct farmer-buyer communication into a single platform.
 
 ---
+
 ## 2. Problem Statement
 
 Traditional agriculture faces several major challenges:
@@ -32,6 +33,7 @@ Most small and medium farmers rely on manual estimation, which often leads to fi
 The Smart Agriculture Platform aims to solve these problems by providing intelligent digital tools to farmers and buyers.
 
 ---
+
 ## 3. Project Goals
 
 - To digitize farm management processes.
@@ -42,3 +44,23 @@ The Smart Agriculture Platform aims to solve these problems by providing intelli
 - To provide educational access to agriculture students using real-time farm data.
 
 ---
+
+## 4. Minimum Viable Product (MVP)
+
+The MVP version of the Smart Agriculture Platform will include:
+
+1. Farmer Dashboard  
+2. Buyer Dashboard  
+3. Admin Dashboard  
+4. Farm Expense & Profit Tracker  
+5. Weather Prediction System  
+6. AI-Based Crop Recommendation System  
+7. Harvest Estimation Calculator  
+8. Farmer & Buyer Messaging System  
+9. Online Payment Integration  
+10. Plant Disease Detection (Basic AI Model)
+
+These features are sufficient to deliver the core value of the platform in the first release.
+
+---
+
