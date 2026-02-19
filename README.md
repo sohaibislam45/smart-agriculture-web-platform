@@ -90,7 +90,7 @@ The **Smart Agriculture Platform** is a comprehensive web-based system designed 
 This project is backed by a comprehensive, industry-standard **Software Requirement Specification (SRS)**.
 
 > [!TIP]
-> [Click here to view the full SRS.md document](SRS.md)
+> [Click here to view the full SRS.md document](https://github.com/sohaibislam45/smart-agriculture-web-platform/blob/main/SRS.md)
 
 ### Document Highlights:
 - **Project Goal:** Digitizing the agricultural value chain for zero-waste farming.
