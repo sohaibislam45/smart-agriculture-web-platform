@@ -171,3 +171,26 @@ It will integrate:
 
 ---
 
+## 9. Technology Stack
+
+Frontend:
+- Next.js
+- React
+- TypeScript
+
+Backend:
+- Node.js
+- Express.js
+
+Database:
+- MongoDB
+
+AI Integration:
+- Machine Learning models for crop and disease prediction
+
+External APIs:
+- Weather API
+- Payment Gateway API
+
+---
+
