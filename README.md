@@ -1,7 +1,7 @@
 # 🌾 Smart Agriculture Platform
 ## A Digital Solution for Modern Farming
 
-[**📄 Read Professional SRS Documentation**](file:///c:/Projects/Smart%20Agriculture%20Web%20Platform/smart-agriculture-web-platform/SRS.md)
+[**📄 Read Professional SRS Documentation**](./SRS.md)
 
 [![Next.js](https://img.shields.io/badge/Next.js-15-black?style=for-the-badge&logo=next.js)](https://nextjs.org/)
 [![React](https://img.shields.io/badge/React-19-blue?style=for-the-badge&logo=react)](https://reactjs.org/)
@@ -90,7 +90,7 @@ The **Smart Agriculture Platform** is a comprehensive web-based system designed 
 This project is backed by a comprehensive, industry-standard **Software Requirement Specification (SRS)**.
 
 > [!TIP]
-> **[Click here to view the full SRS.md document](file:///c:/Projects/Smart%20Agriculture%20Web%20Platform/smart-agriculture-web-platform/SRS.md)**
+> **[Click here to view the full SRS.md document](./SRS.md)**
 
 ### Document Highlights:
 - **Project Goal:** Digitizing the agricultural value chain for zero-waste farming.
