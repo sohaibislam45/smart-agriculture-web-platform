@@ -161,3 +161,13 @@ It will integrate:
 
 ---
 
+## 8. Non-Functional Requirements
+
+- The system must handle multiple concurrent users.
+- The system must ensure secure payment processing.
+- The platform should maintain data privacy.
+- The system should load pages within 3 seconds under normal conditions.
+- The system must be scalable for future expansion.
+
+---
+
