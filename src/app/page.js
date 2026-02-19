@@ -67,11 +67,37 @@ export default function Home() {
             </div>
           </div>
         </div>
+     
+      {/* Statistics */}
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-10 text-center mt-16">
+          <div>
+            <h2 className="text-4xl md:text-5xl font-bold text-green-900">
+              1,000+
+            </h2>
+            <p className="mt-2 text-gray-600">Smart Farms Optimized</p>
+          </div>
+
+          <div>
+            <h2 className="text-4xl md:text-5xl font-bold text-green-900">
+              30%
+            </h2>
+            <p className="mt-2 text-gray-600">Water Saved per Farm</p>
+          </div>
+
+          <div>
+            <h2 className="text-4xl md:text-5xl font-bold text-green-900">
+              40%
+            </h2>
+            <p className="mt-2 text-gray-600">Increase in Crop Yields</p>
+          </div>
+        </div>
 
        
       </section>
 
       
+     
+
       
     </div>
   );
