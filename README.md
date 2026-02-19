@@ -32,3 +32,13 @@ Most small and medium farmers rely on manual estimation, which often leads to fi
 The Smart Agriculture Platform aims to solve these problems by providing intelligent digital tools to farmers and buyers.
 
 ---
+## 3. Project Goals
+
+- To digitize farm management processes.
+- To provide AI-driven crop and disease recommendations.
+- To enable transparent communication between farmers and buyers.
+- To improve productivity through data-based planning.
+- To help farmers track expenses and calculate profit accurately.
+- To provide educational access to agriculture students using real-time farm data.
+
+---
