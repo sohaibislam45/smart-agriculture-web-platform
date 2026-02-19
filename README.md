@@ -194,3 +194,12 @@ External APIs:
 
 ---
 
+## 10. Future Scope
+
+- Mobile application version.
+- IoT sensor integration for real-time soil monitoring.
+- Advanced AI analytics dashboard.
+- Government subsidy integration module.
+
+---
+
