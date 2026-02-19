@@ -79,3 +79,23 @@ Unlike traditional agricultural marketplaces, this platform focuses not only on 
 
 ---
 
+# 6. Overall System Description
+
+### 6.1 Product Perspective
+The system will be a web-based application accessible via desktop and mobile browsers.  
+It will integrate:
+
+- Weather APIs
+- AI models for crop recommendation and disease detection
+- Secure online payment gateway
+- Real-time messaging system
+
+### 6.2 User Categories
+
+1. Farmers  
+2. Buyers  
+3. Admin  
+4. Agriculture Students (Visitor Mode with limited access)
+
+---
+
