@@ -99,3 +99,65 @@ It will integrate:
 
 ---
 
+## 7. Functional Requirements
+
+### 7.1 Farmer Dashboard
+- View and manage crops.
+- Track expenses and profits.
+- View weather updates.
+- Use smart planner.
+- Upload plant images for disease detection.
+- View crop recommendations.
+
+### 7.2 Buyer Dashboard
+- Browse available crops.
+- View harvest estimates.
+- Send purchase requests.
+- Make secure online payments.
+- Communicate directly with farmers.
+
+### 7.3 Admin Dashboard
+- Manage users.
+- Monitor platform activities.
+- View analytics and reports.
+- Approve or remove content.
+- Manage news and updates section.
+
+### 7.4 Farm Expense & Profit Tracker
+- Add expenses (seeds, fertilizer, labor, transport).
+- Automatically calculate total cost.
+- Generate profit estimation reports.
+
+### 7.5 Weather Prediction System
+- Display real-time weather data.
+- Show 7-day forecast.
+- Provide rainfall and temperature alerts.
+
+### 7.6 AI-Based Crop Recommendation System
+- Analyze soil type, weather, and location.
+- Suggest suitable crops for better yield.
+
+### 7.7 Smart Planner
+- Schedule planting, irrigation, fertilization, and harvesting.
+- Provide reminder notifications.
+
+### 7.8 Plant Disease Detection System
+- Upload plant leaf image.
+- Detect possible disease.
+- Suggest preventive actions.
+
+### 7.9 Harvest Estimation System
+- Predict possible crop yield based on input data.
+- Assist farmers in planning sales and logistics.
+
+### 7.10 Messaging System
+- Real-time communication between farmers and buyers.
+- Send text messages and negotiation details.
+
+### 7.11 Agriculture Students Module
+- View anonymized real farm data.
+- Analyze trends for educational purposes.
+- Access research-friendly datasets.
+
+---
+
