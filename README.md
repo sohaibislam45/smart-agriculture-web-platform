@@ -16,3 +16,19 @@ It serves as the primary reference document for developers, project managers, st
 The Smart Agriculture Platform is a web-based system designed to digitally transform traditional farming practices by integrating real-time data, AI-based recommendations, financial tracking, and direct farmer-buyer communication into a single platform.
 
 ---
+## 2. Problem Statement
+
+Traditional agriculture faces several major challenges:
+
+- Lack of data-driven decision-making.
+- Unpredictable weather affecting crop production.
+- Poor communication between farmers and buyers.
+- Unstable market pricing and profit calculation issues.
+- Limited access to plant disease detection tools.
+- Inefficient planning and resource management.
+
+Most small and medium farmers rely on manual estimation, which often leads to financial loss and reduced productivity.
+
+The Smart Agriculture Platform aims to solve these problems by providing intelligent digital tools to farmers and buyers.
+
+---
