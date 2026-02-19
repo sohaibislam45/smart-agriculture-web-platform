@@ -64,3 +64,18 @@ These features are sufficient to deliver the core value of the platform in the f
 
 ---
 
+## 5. Unique Selling Proposition (USP)
+
+The Smart Agriculture Platform stands out due to:
+
+- Integration of AI-based crop recommendation and plant disease detection.
+- Real-time weather data integration.
+- Combined financial tracking and harvest estimation tools.
+- Direct farmer-to-buyer communication system.
+- Student research module with real farm data access.
+- Smart farming planner with automated scheduling suggestions.
+
+Unlike traditional agricultural marketplaces, this platform focuses not only on buying and selling but also on productivity improvement and intelligent decision support.
+
+---
+
