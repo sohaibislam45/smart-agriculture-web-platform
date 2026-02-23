@@ -2,7 +2,7 @@ import React from "react";
 
 const AboutUs = () => {
   return (
-    <div className="min-h-screen max-w-7xl mx-auto px-4">
+    <div>
       <section className="py-16 mt-16 bg-green-100">
         <div className="max-w-7xl mx-auto px-4">
           <div className="flex flex-col md:flex-row items-center">
