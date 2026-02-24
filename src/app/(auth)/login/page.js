@@ -1,10 +1,11 @@
 "use client";
 import { motion as MOTION } from "framer-motion";
-import { Mail, Lock } from "lucide-react";
+import { Mail, Lock, Eye, EyeOff } from "lucide-react";
 import Image from "next/image";
 import logoImg from "../../../../public/logo.png";
 import Link from "next/link";
 import { useState } from "react";
+import Button from "@/components/ui/Button";
 export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
   return (
@@ -17,7 +18,8 @@ export default function LoginPage() {
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.4),transparent_70%)]" />
 
       {/* Logo */}
-      <Link href="/"
+      <Link
+        href="/"
         className="absolute top-4 left-4 sm:top-6 sm:left-6 
       text-sm sm:text-base font-semibold text-gray-700 flex items-center gap-2"
       >
@@ -53,9 +55,7 @@ export default function LoginPage() {
         </h2>
 
         <p className="text-xs sm:text-sm text-gray-500 text-center mt-1 mb-6">
-          Make a new doc to bring your words, data,
-          <br className="hidden sm:block" />
-          and teams together. For free
+         Get access to your dashboard and manage your smart agriculture solutions
         </p>
 
         {/* Form */}
@@ -78,27 +78,35 @@ export default function LoginPage() {
               size={18}
               className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
             />
+
             <input
-              type="password"
+              type={showPassword ? "text" : "password"}
               placeholder="Password"
-              className="w-full pl-10 pr-3 py-2 rounded-xl border border-gray-200 
+              className="w-full pl-10 pr-10 py-2 rounded-xl border border-gray-200 
               focus:outline-none focus:ring-2 focus:ring-black text-sm"
             />
-          </div>
 
+            <button
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-700"
+            >
+              {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+            </button>
+          </div>
           <div className="flex justify-end text-xs text-gray-500">
             <button type="button" className="hover:underline">
               Forgot password?
             </button>
           </div>
 
-          <button
+          <Button
             type="submit"
             className="w-full bg-black text-white py-2 rounded-xl text-sm 
             font-medium hover:opacity-90 transition"
           >
             Get Started
-          </button>
+          </Button>
         </form>
 
         {/* Divider */}
