@@ -95,7 +95,7 @@ export default function LoginPage() {
             </button>
           </div>
           <div className="flex justify-end text-xs text-gray-500">
-            <button type="button" className="hover:underline">
+            <button type="button" className="hover:underline ">
               Forgot password?
             </button>
           </div>
