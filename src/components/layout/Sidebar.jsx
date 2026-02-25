@@ -13,7 +13,7 @@ export default function Sidebar({ userRole }) {
             <a href="/farmer/planner" className="block p-2 hover:bg-gray-100 rounded">Farm Planner</a>
              <a href="/farmer/calculator" className="block p-2 hover:bg-gray-100 rounded">Calculator</a>
             <a href="/farmer/weather" className="block p-2 hover:bg-gray-100 rounded">Weather</a>
-            <a href="/farmer/ai-chat" className="block p-2 hover:bg-gray-100 rounded">Ai Crop Recommendation</a>
+            <a href="/farmer/ai-chat" className="block p-2 hover:bg-gray-100 rounded">Smart Ai  Chatbot</a>
           </>
         )}
         {userRole === 'buyer' && (

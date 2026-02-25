@@ -44,7 +44,7 @@ export default function Header() {
             <Link href="/news" className="hover:text-green-100 transition">
               News
             </Link>
-            <Link href="/weather" className="hover:text-green-100 transition">
+            <Link href="/farmer/weather" className="hover:text-green-100 transition">
               Weather
             </Link>
           </nav>
