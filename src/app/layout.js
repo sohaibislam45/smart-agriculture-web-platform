@@ -27,8 +27,8 @@ export default function RootLayout({ children }) {
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <Header/>
-        <AuthProvider>{children}</AuthProvider>
+        
+        <AuthProvider><Header/>{children}</AuthProvider>
 
         <ToastContainer position="top-right" autoClose={3000} theme="colored" />
       </body>
