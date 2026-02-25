@@ -7,6 +7,7 @@
 
 import Link from 'next/link';
 import { useState } from 'react';
+import { FaRobot } from 'react-icons/fa';
 
 export default function Header() {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -47,6 +48,26 @@ export default function Header() {
             <Link href="/farmer/weather" className="hover:text-green-100 transition">
               Weather
             </Link>
+
+            <Link
+  href="/smart-ai-chatbot"
+  className="group flex items-center gap-3 px-6 py-3 
+  bg-green-500/10 border border-green-500/30 
+  rounded-xl transition-all duration-300
+  hover:bg-green-500 hover:text-white 
+  hover:shadow-lg hover:shadow-green-500/30"
+>
+  <FaRobot className="text-green-500 group-hover:text-white text-xl transition" />
+
+  <span className="font-semibold tracking-wide">
+    Smart Agriculture AI Assistant
+  </span>
+
+  <span className="ml-auto opacity-0 group-hover:opacity-100 transition">
+    →
+  </span>
+</Link>
+
           </nav>
 
           {/* User Profile Dropdown */}
