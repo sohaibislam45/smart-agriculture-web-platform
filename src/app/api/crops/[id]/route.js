@@ -1,84 +1,130 @@
-import { NextResponse } from 'next/server';
-import { getDatabase } from '@/lib/db/mongodb';
-import { COLLECTIONS, getCollection } from '@/lib/db/collections';
-import { ObjectId } from 'mongodb';
+import { getCollection } from "@/lib/db/mongodb";
+import { COLLECTIONS } from "@/lib/db/collections";
+import { ObjectId } from "mongodb";
 
-export async function GET(request, { params }) {
+export async function GET(req, context) {
   try {
-    const { id } = params;
-    const db = await getDatabase();
-    const cropsCollection = getCollection(db, COLLECTIONS.CROPS);
+    const { id } = await context.params; // ✅ IMPORTANT (await)
 
-    const crop = await cropsCollection.findOne({ _id: new ObjectId(id) });
+    const crops = await getCollection(COLLECTIONS.CROPS);
+
+    const crop = await crops.findOne({ _id: new ObjectId(id) });
 
     if (!crop) {
-      return NextResponse.json(
-        { error: 'Crop not found' },
-        { status: 404 }
+      return Response.json(
+        { success: false, message: "Crop not found" },
+        { status: 404 },
       );
     }
 
-    return NextResponse.json({ crop });
+    return Response.json({ success: true, data: crop });
   } catch (error) {
-    console.error('Get crop error:', error);
-    return NextResponse.json(
-      { error: 'Internal server error' },
-      { status: 500 }
+    return Response.json(
+      { success: false, message: error.message },
+      { status: 500 },
     );
   }
 }
-
-export async function PUT(request, { params }) {
+//  PATCH /api/crops/:id  (Owner update: farmerId required)
+export async function PATCH(req, context) {
   try {
-    const { id } = params;
-    const data = await request.json();
-    const db = await getDatabase();
-    const cropsCollection = getCollection(db, COLLECTIONS.CROPS);
+    const { id } = await context.params;
 
-    const result = await cropsCollection.updateOne(
+    const body = await req.json();
+    const { farmerId, ...updateFields } = body;
+
+    if (!farmerId) {
+      return Response.json(
+        { success: false, message: "farmerId required" },
+        { status: 400 },
+      );
+    }
+
+    const crops = await getCollection(COLLECTIONS.CROPS);
+
+    const existing = await crops.findOne({ _id: new ObjectId(id) });
+
+    if (!existing) {
+      return Response.json(
+        { success: false, message: "Crop not found" },
+        { status: 404 },
+      );
+    }
+
+    if (existing.farmerId !== farmerId) {
+      return Response.json(
+        { success: false, message: "Forbidden: not owner" },
+        { status: 403 },
+      );
+    }
+
+    // prevent ownership change
+    delete updateFields.farmerId;
+
+    // clean update object
+    const updateData = { ...updateFields, updatedAt: new Date() };
+
+    // convert numeric fields if present
+    if (updateData.price !== undefined)
+      updateData.price = Number(updateData.price);
+    if (updateData.quantity !== undefined)
+      updateData.quantity = Number(updateData.quantity);
+
+    const result = await crops.findOneAndUpdate(
       { _id: new ObjectId(id) },
-      { $set: { ...data, updatedAt: new Date() } }
+      { $set: updateData },
+      { returnDocument: "after" },
     );
 
-    if (result.matchedCount === 0) {
-      return NextResponse.json(
-        { error: 'Crop not found' },
-        { status: 404 }
-      );
-    }
-
-    return NextResponse.json({ success: true });
+    return Response.json({ success: true, data: result.value });
   } catch (error) {
-    console.error('Update crop error:', error);
-    return NextResponse.json(
-      { error: 'Internal server error' },
-      { status: 500 }
+    return Response.json(
+      { success: false, message: error.message },
+      { status: 500 },
     );
   }
 }
 
-export async function DELETE(request, { params }) {
+//  DELETE /api/crops/:id  (Owner delete: farmerId query required)
+export async function DELETE(req, context) {
   try {
-    const { id } = params;
-    const db = await getDatabase();
-    const cropsCollection = getCollection(db, COLLECTIONS.CROPS);
+    const { id } = await context.params;
 
-    const result = await cropsCollection.deleteOne({ _id: new ObjectId(id) });
+    const { searchParams } = new URL(req.url);
+    const farmerId = searchParams.get("farmerId");
 
-    if (result.deletedCount === 0) {
-      return NextResponse.json(
-        { error: 'Crop not found' },
-        { status: 404 }
+    if (!farmerId) {
+      return Response.json(
+        { success: false, message: "farmerId required" },
+        { status: 400 },
       );
     }
 
-    return NextResponse.json({ success: true });
+    const crops = await getCollection(COLLECTIONS.CROPS);
+
+    const existing = await crops.findOne({ _id: new ObjectId(id) });
+
+    if (!existing) {
+      return Response.json(
+        { success: false, message: "Crop not found" },
+        { status: 404 },
+      );
+    }
+
+    if (existing.farmerId !== farmerId) {
+      return Response.json(
+        { success: false, message: "Forbidden: not owner" },
+        { status: 403 },
+      );
+    }
+
+    await crops.deleteOne({ _id: new ObjectId(id) });
+
+    return Response.json({ success: true, message: "Crop deleted" });
   } catch (error) {
-    console.error('Delete crop error:', error);
-    return NextResponse.json(
-      { error: 'Internal server error' },
-      { status: 500 }
+    return Response.json(
+      { success: false, message: error.message },
+      { status: 500 },
     );
   }
 }
-

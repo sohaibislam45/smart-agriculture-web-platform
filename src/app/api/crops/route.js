@@ -1,59 +1,132 @@
-import { NextResponse } from 'next/server';
-import { getDatabase } from '@/lib/db/mongodb';
-import { COLLECTIONS, getCollection } from '@/lib/db/collections';
+import { getCollection } from "@/lib/db/mongodb";
+import { COLLECTIONS } from "@/lib/db/collections";
 
-export async function GET(request) {
+//  POST /api/crops
+
+export async function POST(req) {
   try {
-    const db = await getDatabase();
-    const cropsCollection = getCollection(db, COLLECTIONS.CROPS);
-    const url = new URL(request.url);
-    const limit = parseInt(url.searchParams.get('limit') || '20');
-    const skip = parseInt(url.searchParams.get('skip') || '0');
-    const status = url.searchParams.get('status');
+    const body = await req.json();
 
-    const query = {};
-    if (status) {
-      query.status = status;
+    const {
+      title,
+      cropType,
+      category,
+      location,
+      price,
+      quantity,
+      unit,
+      farmerId,
+      description,
+      status,
+    } = body;
+
+    if (!title || !price || !farmerId) {
+      return Response.json(
+        { success: false, message: "title, price and farmerId required" },
+        { status: 400 },
+      );
     }
 
-    const crops = await cropsCollection
-      .find(query)
-      .limit(limit)
-      .skip(skip)
-      .sort({ createdAt: -1 })
-      .toArray();
+    const crops = await getCollection(COLLECTIONS.CROPS);
 
-    return NextResponse.json({ crops, count: crops.length });
+    const newCrop = {
+      title,
+      cropType,
+      category,
+      location,
+      price: Number(price),
+      quantity: Number(quantity) || 0,
+      unit: unit || "kg",
+      description: description || "",
+      farmerId,
+      status: status || "available",
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    };
+
+    const result = await crops.insertOne(newCrop);
+
+    return Response.json({
+      success: true,
+      data: { _id: result.insertedId, ...newCrop },
+    });
   } catch (error) {
-    console.error('Crops API error:', error);
-    return NextResponse.json(
-      { error: 'Internal server error' },
-      { status: 500 }
+    return Response.json(
+      { success: false, message: error.message },
+      { status: 500 },
     );
   }
 }
-
-export async function POST(request) {
+//  GET /api/crops
+// search + filter + pagination + sort
+export async function GET(req) {
   try {
-    const data = await request.json();
-    const db = await getDatabase();
-    const cropsCollection = getCollection(db, COLLECTIONS.CROPS);
+    const { searchParams } = new URL(req.url);
 
-    const result = await cropsCollection.insertOne({
-      ...data,
-      createdAt: new Date(),
-      updatedAt: new Date(),
+    const search = searchParams.get("search");
+    const category = searchParams.get("category");
+    const location = searchParams.get("location");
+    const minPrice = searchParams.get("minPrice");
+    const maxPrice = searchParams.get("maxPrice");
+
+    const page = parseInt(searchParams.get("page")) || 1;
+    const limit = parseInt(searchParams.get("limit")) || 10;
+    const sortBy = searchParams.get("sortBy") || "createdAt";
+    const sortOrder = searchParams.get("sortOrder") === "asc" ? 1 : -1;
+
+    const crops = await getCollection(COLLECTIONS.CROPS);
+
+    // filter
+
+    let filter = {};
+
+    if (search) {
+      filter.$or = [
+        { title: { $regex: search, $options: "i" } },
+        { cropType: { $regex: search, $options: "i" } },
+      ];
+    }
+
+    if (category) {
+      filter.category = category;
+    }
+
+    if (location) {
+      filter.location = location;
+    }
+
+    if (minPrice || maxPrice) {
+      filter.price = {};
+      if (minPrice) filter.price.$gte = Number(minPrice);
+      if (maxPrice) filter.price.$lte = Number(maxPrice);
+    }
+
+    // Pagination
+    const skip = (page - 1) * limit;
+
+    const total = await crops.countDocuments(filter);
+
+    const data = await crops
+      .find(filter)
+      .sort({ [sortBy]: sortOrder })
+      .skip(skip)
+      .limit(limit)
+      .toArray();
+
+    return Response.json({
+      success: true,
+      data,
+      pagination: {
+        page,
+        limit,
+        total,
+        totalPages: Math.ceil(total / limit),
+      },
     });
-
-    return NextResponse.json(
-      { success: true, id: result.insertedId },
-      { status: 201 }
-    );
   } catch (error) {
-    console.error('Create crop error:', error);
-    return NextResponse.json(
-      { error: 'Internal server error' },
-      { status: 500 }
+    return Response.json(
+      { success: false, message: error.message },
+      { status: 500 },
     );
   }
 }
