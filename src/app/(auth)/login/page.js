@@ -21,35 +21,36 @@ export default function LoginPage() {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
+    watch,
   } = useForm();
+  const email = watch("email");
+  const onSubmit = async (data) => {
+    const loadingToast = toast.loading("Signing in...");
 
-const onSubmit = async (data) => {
-  const loadingToast = toast.loading("Signing in...");
+    try {
+      const res = await login(data.email, data.password);
 
-  try {
-    const res = await login(data.email, data.password);
+      if (!res.success) {
+        throw new Error(res.error || "Login failed");
+      }
 
-    if (!res.success) {
-      throw new Error(res.error || "Login failed");
+      toast.update(loadingToast, {
+        render: "Login successful",
+        type: "success",
+        isLoading: false,
+        autoClose: 2000,
+      });
+
+      router.replace("/");
+    } catch (error) {
+      toast.update(loadingToast, {
+        render: error.message,
+        type: "error",
+        isLoading: false,
+        autoClose: 3000,
+      });
     }
-
-    toast.update(loadingToast, {
-      render: "Login successful",
-      type: "success",
-      isLoading: false,
-      autoClose: 2000,
-    });
-
-    router.replace("/");
-  } catch (error) {
-    toast.update(loadingToast, {
-      render: error.message,
-      type: "error",
-      isLoading: false,
-      autoClose: 3000,
-    });
-  }
-};
+  };
 
   return (
     <div
@@ -162,8 +163,23 @@ const onSubmit = async (data) => {
             )}
           </div>
 
-          <div className="flex justify-end text-xs text-gray-500">
-            <Link href="/forgot-password" className="hover:underline">
+          {/* Forgot Password */}
+          <div className="flex justify-end text-xs">
+            <Link
+              href={
+                email
+                  ? `/forgot-password?email=${encodeURIComponent(email)}`
+                  : "#"
+              }
+              className={`${
+                email
+                  ? "text-gray-500 hover:underline"
+                  : "text-gray-300 cursor-not-allowed"
+              }`}
+              onClick={(e) => {
+                if (!email) e.preventDefault();
+              }}
+            >
               Forgot password?
             </Link>
           </div>

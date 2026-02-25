@@ -1,38 +1,40 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion as MOTION } from "framer-motion";
 import { Mail } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import Button from "@/components/ui/Button";
 import { toast } from "react-toastify";
 
 export default function ForgotPasswordPage() {
-  const [email, setEmail] = useState("");
   const router = useRouter();
+  const searchParams = useSearchParams();
+
+  // Get email from query params
+  const emailFromQuery = searchParams.get("email") || "";
+  const [email] = useState(emailFromQuery); // read-only, no setEmail
 
   async function handleSubmit(e) {
     e.preventDefault();
 
     const res = await fetch("/api/auth/forgot-password", {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email }),
     });
 
     const data = await res.json();
 
     if (data.success) {
-      router.push(`/verify-otp?email=${email}`);
+      router.push(`/verify-otp?email=${encodeURIComponent(email)}`);
     } else {
       toast.error(data.error || "Something went wrong");
     }
   }
 
   return (
-    <div className="min-h-screen w-full flex items-center justify-center bg-linear-to-b from-primary  to-white px-4">
+    <div className="min-h-screen w-full flex items-center justify-center bg-linear-to-b from-primary to-white px-4">
       <MOTION.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -43,7 +45,7 @@ export default function ForgotPasswordPage() {
         </h2>
 
         <p className="text-sm text-gray-600 text-center mb-6">
-          Enter your email to receive a one-time password (OTP)
+          Your email is prefilled. You will receive a one-time password (OTP)
         </p>
 
         <form onSubmit={handleSubmit} className="space-y-4">
@@ -51,11 +53,9 @@ export default function ForgotPasswordPage() {
             <Mail className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={20} />
             <input
               type="email"
-              placeholder="Email"
-              className="w-full pl-10 pr-3 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-green-500 outline-none text-sm"
               value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
+              readOnly
+              className="w-full pl-10 pr-3 py-3 rounded-xl border border-gray-200 bg-gray-100 cursor-not-allowed outline-none text-sm text-gray-700"
             />
           </div>
 
