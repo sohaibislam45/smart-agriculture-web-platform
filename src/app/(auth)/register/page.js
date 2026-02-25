@@ -21,12 +21,14 @@ import UploadImg from "@/components/UploadImg";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
+import { useAuthContext } from "@/contexts/AuthProvider";
 
 export default function RegisterPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [preview, setPreview] = useState(null);
   const [open, setOpen] = useState(false);
   const router = useRouter();
+  const { login } = useAuthContext();
   const {
     register,
     handleSubmit,
@@ -37,37 +39,46 @@ export default function RegisterPage() {
 
   const password = watch("password");
 
-  const onSubmit = async (data) => {
-    const loadingToast = toast.loading("Creating your account...");
-    
-    try {
-      const response = await axios.post("/api/auth/register", {
-        name: data.name,
-        email: data.email,
-        password: data.password,
-        role: data.role,
-        image: data.image,
-      });
-      const { token, user } = response.data;
-      localStorage.setItem("token", token);
-      console.log("User Registered:", user);
-      toast.update(loadingToast, {
-        render: "Account created successfully",
-        type: "success",
-        isLoading: false,
-        autoClose: 2000,
-      });
-      router.replace("/");
-    } catch (error) {
-      console.error(error || "Registration failed");
-      toast.update(loadingToast, {
-        render: error.response?.data?.error || "Registration failed",
-        type: "error",
-        isLoading: false,
-        autoClose: 3000,
-      });
+const onSubmit = async (data) => {
+  const loadingToast = toast.loading("Creating your account...");
+
+  try {
+    const res = await fetch("/api/auth/register", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    });
+
+    const result = await res.json();
+
+    if (!result.success) {
+      throw new Error(result.error || "Registration failed");
     }
-  };
+
+    // 🔥 Sync auth context properly
+    localStorage.setItem("authToken", result.token);
+
+    await login(data.email, data.password);
+
+    toast.update(loadingToast, {
+      render: "Account created successfully",
+      type: "success",
+      isLoading: false,
+      autoClose: 2000,
+    });
+
+    router.replace("/");
+  } catch (error) {
+    toast.update(loadingToast, {
+      render: error.message,
+      type: "error",
+      isLoading: false,
+      autoClose: 3000,
+    });
+  }
+};
 
   return (
     <div

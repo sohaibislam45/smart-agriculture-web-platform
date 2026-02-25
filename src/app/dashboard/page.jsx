@@ -8,6 +8,7 @@ import AlertsCard from "@/components/dashboard/AlertsCard";
 
 
 const page = () => {
+  
   return (
     <div className="p-4 md:p-6 space-y-6 bg-gray-50 min-h-screen">
      

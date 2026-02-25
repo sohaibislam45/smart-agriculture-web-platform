@@ -11,46 +11,45 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import Button from "@/components/ui/Button";
 import { toast } from "react-toastify";
+import { useAuthContext } from "@/contexts/AuthProvider";
 
 export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
   const router = useRouter();
+  const { login } = useAuthContext();
   const {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
   } = useForm();
 
-  const onSubmit = async (data) => {
-     const loadingToast = toast.loading("Signing in...");
-    try {
-      const res = await axios.post("/api/auth/login", data);
-      if (!res.data.success) {
-        throw new Error("Login failed");
-      }
+const onSubmit = async (data) => {
+  const loadingToast = toast.loading("Signing in...");
 
-      const { token, user } = res.data;
+  try {
+    const res = await login(data.email, data.password);
 
-      localStorage.setItem("token", token);
+    if (!res.success) {
+      throw new Error(res.error || "Login failed");
+    }
 
-      console.log("Logged in user:", user);
-      toast.update(loadingToast, {
+    toast.update(loadingToast, {
       render: "Login successful",
       type: "success",
       isLoading: false,
       autoClose: 2000,
     });
 
-      router.replace("/");
-    } catch (error) {
-      toast.update(loadingToast, {
-      render: error.response?.data?.error || "Login failed",
+    router.replace("/");
+  } catch (error) {
+    toast.update(loadingToast, {
+      render: error.message,
       type: "error",
       isLoading: false,
       autoClose: 3000,
     });
-    }
-  };
+  }
+};
 
   return (
     <div

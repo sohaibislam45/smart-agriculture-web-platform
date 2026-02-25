@@ -1,51 +1,31 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import Image from "next/image";
-import axios from "axios";
+import { useAuthContext } from "@/contexts/AuthProvider";
 
 export default function UserInfo() {
-  const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const fetchUser = async () => {
-      const token = localStorage.getItem("token"); // get JWT
-
-      if (!token) {
-        setLoading(false);
-        return;
-      }
-
-      try {
-        const res = await axios.get("/api/auth/me", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-
-        setUser(res.data.user); // set logged-in user
-      } catch (err) {
-        console.error("Not authenticated", err);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchUser();
-  }, []);
+  const { user, loading } = useAuthContext();
 
   if (loading) return <p>Loading user...</p>;
 
   if (!user) return <p>User not logged in</p>;
 
   return (
-    <div>
-      <p>Welcome, {user.name}!</p>
-      <p>Id: {user.id}</p>
-      <p>Email: {user.email}</p>
-      <p>Role: {user.role}</p>
-      {user.image && <Image src={user.image} alt={user.name} width={50} height={50} />}
+    <div className="space-y-1">
+      <p className="font-semibold">Welcome, {user.name}!</p>
+      <p className="text-sm text-gray-500">ID: {user.id}</p>
+      <p className="text-sm text-gray-500">Email: {user.email}</p>
+      <p className="text-sm text-gray-500">Role: {user.role}</p>
+
+      {user.image && (
+        <Image
+          src={user.image}
+          alt={user.name}
+          width={50}
+          height={50}
+          className="rounded-full mt-2"
+        />
+      )}
     </div>
   );
 }

@@ -1,29 +1,29 @@
 import { NextResponse } from "next/server";
 import { getDatabase } from "@/lib/db/mongodb";
 import { COLLECTIONS, getCollection } from "@/lib/db/collections";
-import { verifyToken } from '@/lib/auth/jwt';
+import { verifyToken } from "@/lib/auth/jwt";
 import { ObjectId } from "mongodb";
+
 export async function GET(request) {
   try {
     const authHeader = request.headers.get("authorization");
 
+    // No token → return null (not error)
     if (!authHeader || !authHeader.startsWith("Bearer ")) {
-      return NextResponse.json(
-        { error: "Unauthorized" },
-        { status: 401 }
-      );
+      return NextResponse.json({ user: null }, { status: 200 });
     }
 
     const token = authHeader.split(" ")[1];
 
-    // Verify JWT
-    const decoded = verifyToken(token);
+    let decoded;
+    try {
+      decoded = verifyToken(token);
+    } catch (err) {
+      return NextResponse.json({ user: null }, { status: 200 });
+    }
 
-    if (!decoded) {
-      return NextResponse.json(
-        { error: "Invalid token" },
-        { status: 401 }
-      );
+    if (!decoded?.userId) {
+      return NextResponse.json({ user: null }, { status: 200 });
     }
 
     const db = await getDatabase();
@@ -34,21 +34,21 @@ export async function GET(request) {
     });
 
     if (!user) {
-      return NextResponse.json(
-        { error: "User not found" },
-        { status: 404 }
-      );
+      return NextResponse.json({ user: null }, { status: 200 });
     }
 
-    return NextResponse.json({
-      user: {
-        id: user._id.toString(),
-        name: user.name,
-        email: user.email,
-        role: user.role,
-        image: user.image || null,
+    return NextResponse.json(
+      {
+        user: {
+          id: user._id.toString(),
+          name: user.name,
+          email: user.email,
+          role: user.role,
+          image: user.image || null,
+        },
       },
-    });
+      { status: 200 }
+    );
   } catch (error) {
     console.error("Auth me error:", error);
     return NextResponse.json(
