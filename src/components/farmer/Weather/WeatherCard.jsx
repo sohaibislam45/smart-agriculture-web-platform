@@ -32,7 +32,7 @@ export default function WeatherCard() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  const API_KEY = "3024bd355587845b847a963c349a2a48";
+  const API_KEY = "073a8bfbae4831acfd5d0662d23829a4";
 
   // Load Leaflet icon
   useEffect(() => {
@@ -73,33 +73,35 @@ export default function WeatherCard() {
     }
   };
 
-  // Detect location weather
+  /* Detect Location Weather */
   const detectLocationWeather = () => {
-  if (!navigator.geolocation || loading) return;
+    if (!navigator.geolocation || loading) return;
 
-  setLoading(true);
+    setLoading(true);
 
-  navigator.geolocation.getCurrentPosition(async (pos) => {
-    try {
-      const { latitude, longitude } = pos.coords;
+    navigator.geolocation.getCurrentPosition(async (pos) => {
+      try {
+        const { latitude, longitude } = pos.coords;
 
-      setPosition([latitude, longitude]); // ⭐ Map move হবে এখানে
+        setPosition([latitude, longitude]);
 
-      const res = await fetch(
-        `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${API_KEY}&units=metric`
-      );
+        const res = await fetch(
+          `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${API_KEY}&units=metric`
+        );
 
-      const data = await res.json();
+        const data = await res.json();
 
-      setWeather(data);
+        if (data.cod !== 200) throw new Error(data.message);
 
-    } catch {
-      setError("Location detection failed");
-    } finally {
-      setLoading(false);
-    }
-  });
-};
+        setWeather(data);
+
+      } catch (err) {
+        setError(err.message || "Location detection failed");
+      } finally {
+        setLoading(false);
+      }
+    });
+  };
 
   const getRecommendation = (temp) => {
     if (!temp) return "";
