@@ -572,7 +572,7 @@ export default function HomePage() {
        <OurService></OurService>
        <HowItWork></HowItWork>
        <AboutUs></AboutUs>
-      <Footer />
+      <Footer></Footer>
     </div>
   );
 }
