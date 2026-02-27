@@ -5,6 +5,10 @@ import "./globals.css";
 import { AuthProvider } from "@/contexts/AuthProvider";
 import { NextAuthProvider } from "./Providers";
 
+import Header from "@/components/shared/Header";
+
+
+
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -26,10 +30,10 @@ export default function RootLayout({ children }) {
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <NextAuthProvider>
-           <AuthProvider>{children}</AuthProvider>
-        </NextAuthProvider>
-       
+
+        <Header/>
+        
+        <AuthProvider>{children}</AuthProvider>
 
         <ToastContainer position="top-right" autoClose={3000} theme="colored" />
       </body>

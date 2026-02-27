@@ -13,9 +13,13 @@
     "bcryptjs": "^3.0.3",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
+
+    "leaflet": "^1.9.4",
+
     "cookie": "^1.1.1",
     "framer-motion": "^12.34.3",
     "jsonwebtoken": "^9.0.3",
+
     "lucide-react": "^0.574.0",
     "mongodb": "^7.1.0",
     "next": "16.1.6",
@@ -27,9 +31,15 @@
     "react-dom": "19.2.3",
     "react-hook-form": "^7.71.2",
     "react-icons": "^5.5.0",
+
+    "react-leaflet": "^5.0.0",
+    "tailwind-merge": "^3.4.1",
+    "tailwindcss-animate": "^1.0.7",
+
     "react-toastify": "^11.0.5",
-    "swr": "^2.4.0",
-    "tailwind-merge": "^3.4.1"
+    "swr": "^2.4.0"
+    
+
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
