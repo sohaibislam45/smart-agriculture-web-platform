@@ -9,6 +9,9 @@ import Image from "next/image";
 import { AnimatePresence, motion } from "framer-motion";
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
+import OurService from "@/components/Home/OurService";
+import HowItWork from "@/components/Home/HowItWork";
+import AboutUs from "@/components/Home/AboutUs";
 
 // Crop carousel data
 const CROPS_DATA = [
@@ -560,6 +563,9 @@ export default function HomePage() {
       <NewsSection />
       <CapabilitiesSection />
       <CTASection />
+      <OurService></OurService>
+       <HowItWork></HowItWork>
+       <AboutUs></AboutUs>
       <Footer />
     </div>
   );
