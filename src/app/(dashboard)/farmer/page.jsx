@@ -1,4 +1,3 @@
-
 'use client';
 
 /**
@@ -39,9 +38,9 @@ export default function FarmerDashboard() {
   ];
 
   return (
-    <div className="flex w-full">
+    <div className="w-full ">
       <main className="flex-1 p-4 md:p-8 bg-green-50 w-full">
-        <div className="max-w-7xl mx-auto w-full">
+        <div className="w-full max-w-[1400px] mx-auto px-4 md:px-6">
           {/* Header */}
           <motion.div
             className="mb-8"
@@ -226,5 +225,3 @@ export default function FarmerDashboard() {
     </div>
   );
 }
-
-
