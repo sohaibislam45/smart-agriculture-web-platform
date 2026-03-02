@@ -1,4 +1,3 @@
-
 'use client';
 
 /**
@@ -92,17 +91,7 @@ const HeroSection = ({ currentCrop }) => (
 const FarmerFeaturesSection = () => {
   const [hoveredCard, setHoveredCard] = useState(null);
 
-import AboutUs from "@/components/Home/AboutUs";
-import Banner from "@/components/Home/Banner";
-import HowItWork from "@/components/Home/HowItWork";
-import MissionVision from "@/components/Home/MissionVision";
-import OurService from "@/components/Home/OurService";
-import Image from "next/image";
-
-
-export default function Home() {
   return (
-
     <section className="w-full py-16 px-4 sm:px-6 lg:px-8 bg-gray-50">
       <div className="max-w-7xl mx-auto w-full">
         <motion.h2
@@ -581,27 +570,3 @@ export default function HomePage() {
     </div>
   );
 }
-
-    <div className="min-h-screen bg-gray-50">
-      {/* banner */}
-
-      <Banner></Banner>
-
-      {/* About Us */}
-      <AboutUs></AboutUs>
-
-      {/* Our Mission & Vision */}
-
-     <MissionVision></MissionVision>
-
-     {/*  */}
-      <OurService></OurService>
-
-      {/* How It Works */}
-
-      <HowItWork></HowItWork>
-      {/*  */}
-    </div>
-  );
-}
-
