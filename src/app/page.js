@@ -145,7 +145,6 @@ const FarmerFeaturesSection = () => {
     </section>
   );
 };
-
 // Section 3: Buyer Dashboard Features
 const BuyerFeaturesSection = () => {
   const [hoveredCard, setHoveredCard] = useState(null);
@@ -164,9 +163,21 @@ const BuyerFeaturesSection = () => {
         </motion.h2>
         <div className="grid md:grid-cols-3 gap-8">
           {[
-            { icon: '🌾', title: 'Fresh Crop Catalog', desc: 'Browse available crops directly from farmers with quality details' },
-            { icon: '📈', title: 'Harvest Estimation', desc: 'View estimated yields and quality predictions for informed decisions' },
-            { icon: '💬', title: 'Direct Messaging', desc: 'Communicate directly with farmers to negotiate and arrange purchases' },
+            {
+              icon: "🌾",
+              title: "Fresh Crop Catalog",
+              desc: "Browse available crops directly from farmers with quality details",
+            },
+            {
+              icon: "📈",
+              title: "Harvest Estimation",
+              desc: "View estimated yields and quality predictions for informed decisions",
+            },
+            {
+              icon: "💬",
+              title: "Direct Messaging",
+              desc: "Communicate directly with farmers to negotiate and arrange purchases",
+            },
           ].map((item, idx) => (
             <motion.div
               key={idx}
@@ -177,11 +188,56 @@ const BuyerFeaturesSection = () => {
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: idx * 0.2 }}
               viewport={{ once: true }}
-              whileHover={{ y: -10, boxShadow: '0 20px 40px rgba(59, 130, 246, 0.2)' }}
+              whileHover={{
+                y: -10,
+                boxShadow: "0 20px 40px rgba(59, 130, 246, 0.2)",
+              }}
             >
-              Learning
-            </a>{" "}
-            center.....
+              <motion.div className="text-4xl mb-4">{item.icon}</motion.div>
+              <h3 className="text-xl font-bold mb-4 text-gray-900">
+                {item.title}
+              </h3>
+              <p className="text-gray-600">{item.desc}</p>
+            </motion.div>
+          ))}
+        </div>
+        <motion.div
+          className="text-center mt-12"
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          transition={{ duration: 0.8, delay: 0.6 }}
+          viewport={{ once: true }}
+        >
+          <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+            <Link
+              href="/buyer"
+              className="inline-block bg-blue-600 text-white px-6 py-3 rounded-lg font-bold hover:bg-blue-700 transition"
+            >
+              Explore Buyer Dashboard →
+            </Link>
+          </motion.div>
+        </motion.div>
+      </div>
+    </section>
+  );
+};
+
+
+// Section 4: Student & Learning Module
+const StudentModuleSection = () => (
+  <section className="w-full py-16 px-4 sm:px-6 lg:px-8 bg-yellow-50">
+    <div className="max-w-7xl mx-auto w-full">
+      <h2 className="text-4xl font-bold text-center mb-12 text-gray-900">
+        📚 Educational Resources for Students
+      </h2>
+      <div className="grid md:grid-cols-2 gap-8 items-center">
+        <div>
+          <div className="text-5xl mb-6">👨‍🎓</div>
+          <h3 className="text-2xl font-bold mb-4 text-gray-900">
+            Learn Modern Agriculture
+          </h3>
+          <p className="text-gray-700 mb-6">
+            Access comprehensive educational content including:
           </p>
           <ul className="space-y-3 text-gray-700">
             <li>✓ Real-time market data and crop prices</li>
@@ -197,9 +253,13 @@ const BuyerFeaturesSection = () => {
               📊 Stay Updated with Market Insights
             </p>
             <p>
-              Track crop prices, understand market demand, and make data-driven decisions for your agricultural career.
+              Track crop prices, understand market demand, and make data-driven
+              decisions for your agricultural career.
             </p>
-            <Link href="/student" className="mt-4 inline-block bg-white text-yellow-600 px-4 py-2 rounded font-bold hover:bg-yellow-50 transition">
+            <Link
+              href="/student"
+              className="mt-4 inline-block bg-white text-yellow-600 px-4 py-2 rounded font-bold hover:bg-yellow-50 transition"
+            >
               Access Student Module →
             </Link>
           </div>
@@ -208,6 +268,7 @@ const BuyerFeaturesSection = () => {
     </div>
   </section>
 );
+
 
 // Section 5: Disease Detection & AI
 const DiseaseDetectionSection = () => (
