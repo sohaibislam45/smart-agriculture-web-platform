@@ -15,6 +15,7 @@ import AboutUs from "@/components/Home/AboutUs";
 import HeroSection from "@/components/Home/HeroSection";
 import StatsBar from "@/components/Home/StatsBar";
 import FarmerFeatures from "@/components/Home/Farmerfeatures";
+import BuyerFeatures from "@/components/Home/BuyerFeatures";
 
 
 
@@ -582,7 +583,8 @@ export default function HomePage() {
       <HeroSection />
       <StatsBar></StatsBar>
       <FarmerFeatures/>
-      <BuyerFeaturesSection />
+      <BuyerFeatures></BuyerFeatures>
+      <HowItWork></HowItWork>
       <StudentModuleSection />
       <DiseaseDetectionSection />
       <WeatherPlanningSection />
@@ -591,7 +593,7 @@ export default function HomePage() {
       <CapabilitiesSection />
       <CTASection />
       <OurService></OurService>
-      <HowItWork></HowItWork>
+      
       <AboutUs></AboutUs>
     </div>
   );
