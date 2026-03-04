@@ -36,7 +36,7 @@ export default function RoleRoute({ children, role, fallback = null }) {
 
     if (!hasAccess) {
       // Every role goes to their own dashboard — admin included
-      router.replace(`/${user.role}/dashboard`);
+      router.replace(`/${user.role}`);
     }
   }, [user, loading, hasAccess, router]);
 

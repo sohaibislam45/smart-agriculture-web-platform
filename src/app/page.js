@@ -12,96 +12,10 @@ import { useState, useEffect } from "react";
 import OurService from "@/components/Home/OurService";
 import HowItWork from "@/components/Home/HowItWork";
 import AboutUs from "@/components/Home/AboutUs";
+import HeroSection from "@/components/Home/HeroSection";
 
-// Crop carousel data
-const CROPS_DATA = [
-  {
-    name: "Wheat",
-    image: "https://images.unsplash.com/photo-1500382017468-9049fed747ef",
-  },
-  {
-    name: "Corn",
-    image: "https://images.unsplash.com/photo-1601493700631-2b16ec4b4716",
-  },
-  {
-    name: "Carrot",
-    image: "https://images.unsplash.com/photo-1447175008436-170170d0e979",
-  },
-  {
-    name: "Lettuce",
-    image: "https://images.unsplash.com/photo-1582515073490-dc5b3a3d1f6d",
-  },
-  {
-    name: "Tomato",
-    image: "https://images.unsplash.com/photo-1592928302636-c83cf1cda3a0",
-  },
-];
 
-// Section 1: Hero Section with Carousel
-const HeroSection = ({ currentCrop }) => (
-  <section className="relative h-screen w-full overflow-hidden flex items-center justify-center text-white">
-    {/* Background Auto-Changing Images */}
-    <AnimatePresence mode="wait">
-      <motion.div
-        key={currentCrop}
-        initial={{ opacity: 0, scale: 1.1 }}
-        animate={{ opacity: 1, scale: 1 }}
-        exit={{ opacity: 0, scale: 1.05 }}
-        transition={{ duration: 1 }}
-        className="absolute inset-0"
-      >
-        <Image
-          src={CROPS_DATA[currentCrop].image}
-          alt="Agriculture Background"
-          fill
-          priority
-          className="object-cover"
-        />
-      </motion.div>
-    </AnimatePresence>
 
-    {/* Dark Overlay for Readability */}
-    <div className="absolute inset-0 bg-black/65" />
-
-    {/* Center Content */}
-    <div className="relative z-10 text-center px-6">
-      <motion.h1
-        initial={{ opacity: 0, y: 40 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8 }}
-        className="text-4xl sm:text-6xl lg:text-7xl font-bold mb-8"
-      >
-        SmartAgri Platform
-      </motion.h1>
-
-      <motion.p
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 0.3 }}
-        className="text-lg sm:text-xl text-gray-200 mb-10 max-w-2xl mx-auto"
-      >
-        Empowering farmers and buyers with modern AI-driven agriculture
-        solutions.
-      </motion.p>
-
-      {/* Only Two Buttons */}
-      <div className="flex flex-wrap justify-center gap-6">
-        <Link
-          href="/farmer"
-          className="px-10 py-4 bg-white text-green-800 rounded-lg font-bold hover:bg-green-50 transition shadow-xl"
-        >
-          👨‍🌾 Farmer
-        </Link>
-        <Link
-          href="/buyer"
-          className="px-10 py-4 bg-green-600 text-white rounded-lg font-bold hover:bg-green-700 transition shadow-xl"
-        >
-          👨‍💼 Buyer
-        </Link>
-      </div>
-    </div>
-  </section>
-);
 
 // Section 2: Farmer Dashboard Features
 const FarmerFeaturesSection = () => {
@@ -659,17 +573,11 @@ const Footer = () => (
 export default function HomePage() {
   const [currentCrop, setCurrentCrop] = useState(0);
 
-  // Auto-advance carousel
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setCurrentCrop((prev) => (prev + 1) % CROPS_DATA.length);
-    }, 5000);
-    return () => clearInterval(timer);
-  }, []);
+ 
 
   return (
     <div className="w-full min-h-screen bg-white">
-      <HeroSection currentCrop={currentCrop} />
+      <HeroSection />
       <FarmerFeaturesSection />
       <BuyerFeaturesSection />
       <StudentModuleSection />
