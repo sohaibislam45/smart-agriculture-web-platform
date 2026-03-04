@@ -7,6 +7,7 @@ import { useAuthContext } from "@/contexts/AuthProvider";
 import { usePathname } from "next/navigation";
 import Image from "next/image";
 import { toast } from "react-toastify";
+import ProtectedLink from "../auth/ProtectedLink";
 
 export default function Header() {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -19,29 +20,29 @@ export default function Header() {
     return null;
   }
 
- const handleLogout = async () => {
-  const loadingToast = toast.loading("Signing out...");
+  const handleLogout = async () => {
+    const loadingToast = toast.loading("Signing out...");
 
-  try {
-    await logout();
+    try {
+      await logout();
 
-    toast.update(loadingToast, {
-      render: "Logged out successfully",
-      type: "success",
-      isLoading: false,
-      autoClose: 2000,
-    });
+      toast.update(loadingToast, {
+        render: "Logged out successfully",
+        type: "success",
+        isLoading: false,
+        autoClose: 2000,
+      });
 
-    setIsDropdownOpen(false);
-  } catch (error) {
-    toast.update(loadingToast, {
-      render: error?.message || "Logout failed",
-      type: "error",
-      isLoading: false,
-      autoClose: 3000,
-    });
-  }
-};
+      setIsDropdownOpen(false);
+    } catch (error) {
+      toast.update(loadingToast, {
+        render: error?.message || "Logout failed",
+        type: "error",
+        isLoading: false,
+        autoClose: 3000,
+      });
+    }
+  };
 
   return (
     <header className="bg-gradient-to-r from-green-800 to-green-700 text-white shadow-lg sticky top-0 z-50">
@@ -69,6 +70,9 @@ export default function Header() {
             <Link href="/news" className="hover:text-green-100 transition">
               News
             </Link>
+            <ProtectedLink href="/planner" className="hover:text-green-100 transition">
+               Farm Planner
+            </ProtectedLink>
             <Link
               href="/farmer/weather"
               className="hover:text-green-100 transition"
