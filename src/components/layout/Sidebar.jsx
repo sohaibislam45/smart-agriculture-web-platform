@@ -2,7 +2,8 @@
 
 export default function Sidebar({ userRole }) {
   return (
-    <aside className="w-64 border-r min-h-screen p-4">
+    <div className="min-h-screen bg-base-200 max-w-7xl mx-auto">
+    <aside >
       <nav className="space-y-2">
         {/* Navigation items based on user role */}
         {userRole === 'farmer' && (
@@ -32,6 +33,7 @@ export default function Sidebar({ userRole }) {
         )}
       </nav>
     </aside>
+    </div>
   );
 }
 
