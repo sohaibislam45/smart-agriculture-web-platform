@@ -9,8 +9,7 @@ import Image from "next/image";
 import { toast } from "react-toastify";
 import ProtectedLink from "../auth/ProtectedLink";
 import { LogOut, Settings, User, Menu, X, ChevronDown, Search, ArrowUpRight } from "lucide-react";
-
-// ── Declared OUTSIDE Header so React never re-creates it during render ──
+import { useRole } from "@/hooks/useRole";
 
 function NavLink({ href, children, scrolled, isActive, onClick }) {
   return (
@@ -19,10 +18,10 @@ function NavLink({ href, children, scrolled, isActive, onClick }) {
       onClick={onClick}
       className={`text-[15px] font-bold tracking-wide transition-colors duration-200
         ${isActive
-          ? "text-highlight"                               // --highlight: golden yellow — active indicator
+          ? "text-highlight"
           : scrolled
-            ? "text-foreground hover:text-primary"         // dark green on white bg
-            : "text-white/90 hover:text-highlight"         // white → highlight on transparent
+            ? "text-foreground hover:text-primary"
+            : "text-white/90 hover:text-highlight"
         }`}
     >
       {children}
@@ -52,11 +51,23 @@ export default function Header() {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const { user, logout } = useAuthContext();
+  const { user, loading, logout } = useAuthContext();
   const pathname = usePathname();
 
-  // useEffect is necessary — attaching a scroll listener to `window` is a DOM
-  // side effect that must happen after mount. Cleanup prevents memory leaks.
+  const { isAdmin, isFarmer, isBuyer, isStudent } = useRole();
+
+  const dashboardHref = isAdmin   ? "/admin"
+    : isFarmer  ? "/farmer"
+    : isBuyer   ? "/buyer"
+    : isStudent ? "/student"
+    : "/dashboard";
+
+  const isDashboardActive =
+    pathname.startsWith("/admin") ||
+    pathname.startsWith("/farmer") ||
+    pathname.startsWith("/buyer") ||
+    pathname.startsWith("/student");
+
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40);
     window.addEventListener("scroll", onScroll, { passive: true });
@@ -99,7 +110,6 @@ export default function Header() {
     onClick: closeAll,
   });
 
-  // ProtectedLink needs the same active/scrolled styles inlined
   const protectedLinkClass = `text-[15px] font-bold tracking-wide transition-colors duration-200
     ${pathname === "/planner"
       ? "text-highlight"
@@ -121,7 +131,7 @@ export default function Header() {
       <header
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300
           ${scrolled
-            ? "bg-card/95 backdrop-blur-md shadow-md py-3"   // --card: #ffffff
+            ? "bg-card/95 backdrop-blur-md shadow-md py-3"
             : "bg-transparent py-5"
           }`}
       >
@@ -151,6 +161,18 @@ export default function Header() {
 
               <NavLink {...linkProps("/WeatherMap/weather")}>Weather</NavLink>
 
+              {/* ── Dashboard: only when auth is resolved and user exists ── */}
+              {!loading && user && (
+                <NavLink
+                  href={dashboardHref}
+                  scrolled={scrolled}
+                  isActive={isDashboardActive}
+                  onClick={closeAll}
+                >
+                  Dashboard
+                </NavLink>
+              )}
+
             </nav>
 
             {/* ── RIGHT: Search + AI CTA + Auth + Hamburger ── */}
@@ -165,7 +187,7 @@ export default function Header() {
                 <Search size={19} strokeWidth={2.5} />
               </button>
 
-              {/* AI Assistant CTA — uses --highlight as bg (golden yellow = earthy & warm) */}
+              {/* AI Assistant CTA */}
               <Link
                 href="/smart-ai-chatbot"
                 onClick={closeAll}
@@ -178,82 +200,117 @@ export default function Header() {
                 <ArrowUpRight size={15} strokeWidth={2.5} />
               </Link>
 
-              {/* ── Auth: Logged In ── */}
-              {user ? (
-                <div className="relative">
-                  <button
-                    onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                    aria-label="User menu"
-                    aria-expanded={isDropdownOpen}
-                    className={`flex items-center gap-2 px-2.5 py-1.5 rounded-xl transition-all duration-200
-                      ${scrolled ? "hover:bg-muted" : "hover:bg-white/10"}`}
-                  >
-                    {/* Avatar */}
-                    <div className="w-8 h-8 rounded-full overflow-hidden bg-primary flex items-center justify-center shrink-0 ring-2 ring-secondary/50">
-                      {user?.image ? (
-                        <Image src={user.image} alt="Avatar" width={32} height={32} className="w-full h-full object-cover" />
-                      ) : (
-                        <span className="text-sm text-primary-foreground">👤</span>
+              {/* ── Auth: show nothing while loading to prevent flicker ── */}
+              {!loading && (
+                <>
+                  {user ? (
+                    <div className="relative">
+                      <button
+                        onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                        aria-label="User menu"
+                        aria-expanded={isDropdownOpen}
+                        className={`flex items-center gap-2 px-2.5 py-1.5 rounded-xl transition-all duration-200
+                          ${scrolled ? "hover:bg-muted" : "hover:bg-white/10"}`}
+                      >
+                        {/* Avatar */}
+                        <div className="w-8 h-8 rounded-full overflow-hidden bg-primary flex items-center justify-center shrink-0 ring-2 ring-secondary/50">
+                          {user?.image ? (
+                            <Image
+                              src={user.image}
+                              alt="Avatar"
+                              width={32}
+                              height={32}
+                              className="w-full h-full object-cover"
+                            />
+                          ) : (
+                            <span className="text-sm text-primary-foreground">👤</span>
+                          )}
+                        </div>
+                        {/* Name + role */}
+                        <div className="hidden sm:block text-left">
+                          <p className={`text-sm font-bold leading-tight
+                            ${scrolled ? "text-foreground" : "text-white"}`}>
+                            {user.name || "User"}
+                          </p>
+                          <p className={`text-xs leading-tight capitalize
+                            ${scrolled ? "text-muted-foreground" : "text-white/60"}`}>
+                            {user.role || "Member"}
+                          </p>
+                        </div>
+                        <ChevronDown
+                          size={14}
+                          strokeWidth={2.5}
+                          className={`transition-transform duration-200
+                            ${isDropdownOpen ? "rotate-180" : ""}
+                            ${scrolled ? "text-muted-foreground" : "text-white"}`}
+                        />
+                      </button>
+
+                      {/* Dropdown */}
+                      {isDropdownOpen && (
+                        <div className="absolute right-0 mt-2.5 w-52 bg-card rounded-2xl shadow-2xl py-2 z-50 border border-border">
+                          <div className="px-4 py-2.5 border-b border-border">
+                            <p className="text-sm font-bold text-card-foreground">{user.name}</p>
+                            <p className="text-xs text-muted-foreground capitalize">{user.role}</p>
+                          </div>
+
+                          {/* Dashboard shortcut inside dropdown too */}
+                          <Link
+                            href={dashboardHref}
+                            onClick={closeAll}
+                            className="flex items-center gap-2.5 px-4 py-2.5 text-sm text-card-foreground hover:bg-muted hover:text-primary transition"
+                          >
+                            <User size={15} /> Dashboard
+                          </Link>
+
+                          <Link
+                            href="/profile"
+                            onClick={closeAll}
+                            className="flex items-center gap-2.5 px-4 py-2.5 text-sm text-card-foreground hover:bg-muted hover:text-primary transition"
+                          >
+                            <User size={15} /> Profile
+                          </Link>
+
+                          <Link
+                            href="/settings"
+                            onClick={closeAll}
+                            className="flex items-center gap-2.5 px-4 py-2.5 text-sm text-card-foreground hover:bg-muted hover:text-primary transition"
+                          >
+                            <Settings size={15} /> Settings
+                          </Link>
+
+                          <hr className="my-1 border-border" />
+
+                          <button
+                            onClick={handleLogout}
+                            className="flex items-center gap-2.5 w-full text-left px-4 py-2.5 text-sm text-destructive hover:bg-destructive/10 font-semibold transition"
+                          >
+                            <LogOut size={15} /> Logout
+                          </button>
+                        </div>
                       )}
                     </div>
-                    {/* Name + role */}
-                    <div className="hidden sm:block text-left">
-                      <p className={`text-sm font-bold leading-tight
-                        ${scrolled ? "text-foreground" : "text-white"}`}>
-                        {user.name || "User"}
-                      </p>
-                      <p className={`text-xs leading-tight
-                        ${scrolled ? "text-muted-foreground" : "text-white/60"}`}>
-                        {user.role || "Member"}
-                      </p>
-                    </div>
-                    <ChevronDown
-                      size={14}
-                      strokeWidth={2.5}
-                      className={`transition-transform duration-200
-                        ${isDropdownOpen ? "rotate-180" : ""}
-                        ${scrolled ? "text-muted-foreground" : "text-white"}`}
-                    />
-                  </button>
 
-                  {/* Dropdown */}
-                  {isDropdownOpen && (
-                    <div className="absolute right-0 mt-2.5 w-52 bg-card rounded-2xl shadow-2xl py-2 z-50 border border-border">
-                      <div className="px-4 py-2.5 border-b border-border">
-                        <p className="text-sm font-bold text-card-foreground">{user.name}</p>
-                        <p className="text-xs text-muted-foreground">{user.role}</p>
-                      </div>
-                      <Link href="/profile" onClick={closeAll}
-                        className="flex items-center gap-2.5 px-4 py-2.5 text-sm text-card-foreground hover:bg-muted hover:text-primary transition">
-                        <User size={15} /> Profile
+                  ) : (
+                    /* ── Logged Out ── */
+                    <div className="hidden sm:flex items-center gap-3">
+                      <Link
+                        href="/login"
+                        className={`text-sm font-bold transition-colors duration-200
+                          ${scrolled ? "text-foreground hover:text-primary" : "text-white/90 hover:text-highlight"}`}
+                      >
+                        Login
                       </Link>
-                      <Link href="/settings" onClick={closeAll}
-                        className="flex items-center gap-2.5 px-4 py-2.5 text-sm text-card-foreground hover:bg-muted hover:text-primary transition">
-                        <Settings size={15} /> Settings
+                      <Link
+                        href="/register"
+                        className="px-5 py-2.5 rounded-full bg-highlight text-foreground text-sm font-bold
+                          hover:brightness-105 transition-all duration-200 shadow-sm"
+                      >
+                        Register
                       </Link>
-                      <hr className="my-1 border-border" />
-                      <button onClick={handleLogout}
-                        className="flex items-center gap-2.5 w-full text-left px-4 py-2.5 text-sm text-destructive hover:bg-destructive/10 font-semibold transition">
-                        <LogOut size={15} /> Logout
-                      </button>
                     </div>
                   )}
-                </div>
-
-              ) : (
-                /* ── Auth: Logged Out ── */
-                <div className="hidden sm:flex items-center gap-3">
-                  <Link href="/login"
-                    className={`text-sm font-bold transition-colors duration-200
-                      ${scrolled ? "text-foreground hover:text-primary" : "text-white/90 hover:text-highlight"}`}>
-                    Login
-                  </Link>
-                  <Link href="/register"
-                    className="px-5 py-2.5 rounded-full bg-highlight text-foreground text-sm font-bold
-                      hover:brightness-105 transition-all duration-200 shadow-sm">
-                    Register
-                  </Link>
-                </div>
+                </>
               )}
 
               {/* Hamburger — below xl */}
@@ -278,7 +335,7 @@ export default function Header() {
           <div className={`px-6 pb-6 pt-4 space-y-1 border-t
             ${scrolled
               ? "bg-card border-border"
-              : "bg-foreground/80 backdrop-blur-md border-white/10"   // --foreground: #1B5E20 deep forest
+              : "bg-foreground/80 backdrop-blur-md border-white/10"
             }`}
           >
             <MobileNavLink {...linkProps("/")}>Home</MobileNavLink>
@@ -292,26 +349,47 @@ export default function Header() {
 
             <MobileNavLink {...linkProps("/WeatherMap/weather")}>Weather</MobileNavLink>
 
+            {/* ── Dashboard in mobile drawer ── */}
+            {!loading && user && (
+              <MobileNavLink
+                href={dashboardHref}
+                scrolled={scrolled}
+                isActive={isDashboardActive}
+                onClick={closeAll}
+              >
+                Dashboard
+              </MobileNavLink>
+            )}
+
             {/* AI CTA in drawer */}
-            <Link href="/smart-ai-chatbot" onClick={closeAll}
+            <Link
+              href="/smart-ai-chatbot"
+              onClick={closeAll}
               className="flex items-center gap-2.5 px-4 py-3 mt-1 rounded-xl
                 bg-highlight text-foreground text-sm font-bold
-                hover:brightness-105 transition-all duration-200">
+                hover:brightness-105 transition-all duration-200"
+            >
               <FaRobot className="text-base" />
               AI Assistant
               <ArrowUpRight size={15} className="ml-auto" />
             </Link>
 
             {/* Login / Register when logged out */}
-            {!user && (
+            {!loading && !user && (
               <div className="pt-3 border-t border-white/10 flex flex-col gap-2">
-                <Link href="/login" onClick={closeAll}
+                <Link
+                  href="/login"
+                  onClick={closeAll}
                   className={`w-full text-center px-4 py-2.5 rounded-xl text-sm font-bold transition
-                    ${scrolled ? "text-foreground hover:bg-muted" : "text-white hover:bg-white/10"}`}>
+                    ${scrolled ? "text-foreground hover:bg-muted" : "text-white hover:bg-white/10"}`}
+                >
                   Login
                 </Link>
-                <Link href="/register" onClick={closeAll}
-                  className="w-full text-center px-4 py-2.5 rounded-xl bg-highlight text-foreground text-sm font-bold hover:brightness-105 transition">
+                <Link
+                  href="/register"
+                  onClick={closeAll}
+                  className="w-full text-center px-4 py-2.5 rounded-xl bg-highlight text-foreground text-sm font-bold hover:brightness-105 transition"
+                >
                   Register
                 </Link>
               </div>

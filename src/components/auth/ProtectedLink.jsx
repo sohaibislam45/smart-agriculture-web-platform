@@ -34,7 +34,7 @@ export default function ProtectedLink({ href, role, className, children }) {
       const allowed = Array.isArray(role) ? role : [role];
       if (!allowed.includes(user.role) && user.role !== 'admin') {
         // Wrong role → send to their own dashboard
-        router.push(`/${user.role}/dashboard`);
+        router.push(`/${user.role}`);
         return;
       }
     }
