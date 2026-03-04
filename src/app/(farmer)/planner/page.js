@@ -83,7 +83,7 @@ export default function PlannerPage() {
 
   return (
     <PrivateRoute>
-      <div className="min-h-screen bg-background py-6 px-4">
+      <div className="min-h-screen bg-background py-6 px-4 pt-20">
         <div className="max-w-2xl mx-auto ">
 
           {/* Page header */}

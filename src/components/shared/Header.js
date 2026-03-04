@@ -149,7 +149,7 @@ export default function Header() {
                 Farm Planner
               </ProtectedLink>
 
-              <NavLink {...linkProps("/farmer/weather")}>Weather</NavLink>
+              <NavLink {...linkProps("/WeatherMap/weather")}>Weather</NavLink>
 
             </nav>
 
@@ -290,7 +290,7 @@ export default function Header() {
               Farm Planner
             </ProtectedLink>
 
-            <MobileNavLink {...linkProps("/farmer/weather")}>Weather</MobileNavLink>
+            <MobileNavLink {...linkProps("/WeatherMap/weather")}>Weather</MobileNavLink>
 
             {/* AI CTA in drawer */}
             <Link href="/smart-ai-chatbot" onClick={closeAll}
