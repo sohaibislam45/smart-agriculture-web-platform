@@ -1,8 +1,9 @@
 'use client';
 
 import { useState } from 'react';
-import { Tractor, Sprout, Repeat2, FlaskConical, Droplets, Scissors, Bug, Wheat, Waves, ChevronDown, ChevronUp, Plus, RefreshCw, MapPin, Calendar, Leaf, TrendingUp } from 'lucide-react';
+import { Tractor, Sprout, Repeat2, FlaskConical, Droplets, Scissors, Bug, Wheat, Waves, ChevronDown, ChevronUp, Plus, RefreshCw, MapPin, Calendar, Leaf, TrendingUp, Download, Loader2 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { usePlanDownload } from '@/hooks/usePlanDownload';
 
 const CATEGORY_STYLES = {
   land:       { icon: <Tractor className="w-3.5 h-3.5" />,       label: 'Land Prep',    color: 'bg-amber-100 text-amber-700 border-amber-200 dark:bg-amber-900/30 dark:text-amber-300'  },
@@ -28,7 +29,8 @@ const FERTILIZER_LABELS = {
 };
 
 export default function PlanResult({ plan, onReset }) {
-  const [activeTab, setActiveTab]     = useState('timeline');
+  const [activeTab, setActiveTab]       = useState('timeline');
+  const { downloadPDF, isDownloading }  = usePlanDownload();
   const [expandedWeek, setExpandedWeek] = useState(0);
 
   const tasksByWeek = plan.timeline.reduce((acc, task) => {
@@ -62,15 +64,30 @@ export default function PlanResult({ plan, onReset }) {
             {plan.location.district}{plan.location.upazila ? `, ${plan.location.upazila}` : ''}
           </p>
         </div>
-        <motion.button
-          whileHover={{ scale: 1.03 }}
-          whileTap={{ scale: 0.97 }}
-          onClick={onReset}
-          className="flex items-center gap-1.5 text-xs font-medium text-primary border border-primary/30 bg-primary/5 hover:bg-primary/10 px-3 py-2 rounded-xl transition-all duration-200"
-        >
-          <RefreshCw className="w-3.5 h-3.5" />
-          New Plan
-        </motion.button>
+        <div className="flex items-center gap-2">
+          <motion.button
+            whileHover={{ scale: 1.03 }}
+            whileTap={{ scale: 0.97 }}
+            onClick={() => downloadPDF(plan)}
+            disabled={isDownloading}
+            className="flex items-center gap-1.5 text-xs font-medium text-primary border border-primary/30 bg-primary/5 hover:bg-primary/10 px-3 py-2 rounded-xl transition-all duration-200 disabled:opacity-60 disabled:cursor-not-allowed"
+          >
+            {isDownloading
+              ? <Loader2 className="w-3.5 h-3.5 animate-spin" />
+              : <Download className="w-3.5 h-3.5" />
+            }
+            <span className="hidden sm:inline">{isDownloading ? 'Generating...' : 'Download PDF'}</span>
+          </motion.button>
+          <motion.button
+            whileHover={{ scale: 1.03 }}
+            whileTap={{ scale: 0.97 }}
+            onClick={onReset}
+            className="flex items-center gap-1.5 text-xs font-medium text-muted-foreground border border-border bg-card hover:bg-muted/40 px-3 py-2 rounded-xl transition-all duration-200"
+          >
+            <RefreshCw className="w-3.5 h-3.5" />
+            <span className="hidden sm:inline">New Plan</span>
+          </motion.button>
+        </div>
       </div>
 
       {/* Summary card */}
