@@ -1,41 +1,34 @@
 'use client';
 
-import Image from "next/image";
 import Link from 'next/link';
 import { useState } from 'react';
-import { usePathname } from 'next/navigation';
-
-
-import { useAuth } from "@/hooks/useAuth";
-import useCurrentUser from "@/hooks/useCurrentUser";
+import { FaRobot } from 'react-icons/fa';
 import { useAuthContext } from "@/contexts/AuthProvider";
+import { usePathname } from 'next/navigation';
+import Image from 'next/image';
 
 export default function Header() {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const { user, logout } = useAuthContext();
-   console.log(user);
   const pathname = usePathname();
 
-  // 1. Define the routes where the header should NOT appear
+  // Hide header on login & register
   const hiddenRoutes = ['/login', '/register'];
-
-  // 2. If the current URL is in the hiddenRoutes array, render nothing
   if (hiddenRoutes.includes(pathname)) {
     return null;
   }
 
-  // 3. Handle the logout process and close the dropdown
   const handleLogout = async () => {
     await logout();
-    setIsDropdownOpen(false); 
+    setIsDropdownOpen(false);
   };
 
   return (
     <header className="bg-gradient-to-r from-green-800 to-green-700 text-white shadow-lg sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
         <div className="flex justify-between items-center">
-          
-       
+
+          {/* Brand Logo */}
           <a href="/">
             <div className="flex items-center space-x-2 cursor-pointer hover:opacity-90 transition">
               <Image 
@@ -48,19 +41,36 @@ export default function Header() {
             </div>
           </a>
 
-          {/* Navigation Menu */}
+
+          {/* Navigation */}
           <nav className="hidden md:flex items-center space-x-6">
             <Link href="/" className="hover:text-green-100 transition">Home</Link>
             <Link href="/farmer" className="hover:text-green-100 transition">Farmer</Link>
             <Link href="/buyer" className="hover:text-green-100 transition">Buyer</Link>
             <Link href="/news" className="hover:text-green-100 transition">News</Link>
-            <Link href="/weather" className="hover:text-green-100 transition">Weather</Link>
+            <Link href="/farmer/weather" className="hover:text-green-100 transition">Weather</Link>
+
+            <Link
+              href="/smart-ai-chatbot"
+              className="group flex items-center gap-3 px-6 py-3 
+              bg-green-500/10 border border-green-500/30 
+              rounded-xl transition-all duration-300
+              hover:bg-green-500 hover:text-white 
+              hover:shadow-lg hover:shadow-green-500/30"
+            >
+              <FaRobot className="text-green-500 group-hover:text-white text-xl transition" />
+              <span className="font-semibold tracking-wide">
+                Smart Agriculture AI Assistant
+              </span>
+              <span className="ml-auto opacity-0 group-hover:opacity-100 transition">
+                →
+              </span>
+            </Link>
           </nav>
 
-          {/* Authentication Section (Conditional Rendering) */}
+          {/* Authentication Section */}
           <div className="flex items-center">
             {user ? (
-             
               <div className="relative">
                 <button
                   onClick={() => setIsDropdownOpen(!isDropdownOpen)}
@@ -74,7 +84,6 @@ export default function Header() {
                   <span className="text-sm">▼</span>
                 </button>
 
-                {/* Dropdown Menu */}
                 {isDropdownOpen && (
                   <div className="absolute right-0 mt-2 w-48 bg-white text-gray-800 rounded-lg shadow-xl py-2 z-10">
                     <Link 
@@ -92,7 +101,6 @@ export default function Header() {
                       ⚙️ Settings
                     </Link>
                     <hr className="my-1 border-gray-200" />
-                    
                     <button 
                       onClick={handleLogout}
                       className="w-full text-left px-4 py-2 hover:bg-gray-100 text-red-600 font-medium"
@@ -103,7 +111,6 @@ export default function Header() {
                 )}
               </div>
             ) : (
-              // -------- LOGGED OUT STATE: Show Login/Register Buttons --------
               <div className="flex items-center space-x-4">
                 <Link 
                   href="/login" 

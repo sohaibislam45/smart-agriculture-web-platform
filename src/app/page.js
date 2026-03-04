@@ -1,4 +1,3 @@
-
 'use client';
 
 /**
@@ -10,13 +9,6 @@ import Image from "next/image";
 import { AnimatePresence, motion } from "framer-motion";
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
-
-import AboutUs from "@/components/Home/AboutUs";
-import Banner from "@/components/Home/Banner";
-import HowItWork from "@/components/Home/HowItWork";
-import MissionVision from "@/components/Home/MissionVision";
-import OurService from "@/components/Home/OurService";
-
 
 // Crop carousel data
 const CROPS_DATA = [
@@ -569,12 +561,8 @@ export default function HomePage() {
       <NewsSection />
       <CapabilitiesSection />
       <CTASection />
-       <OurService></OurService>
-       <HowItWork></HowItWork>
-       <AboutUs></AboutUs>
-      <Footer></Footer>
+      <Footer />
     </div>
   );
 }
-
-
+>>>>>>>>> Temporary merge branch 2
