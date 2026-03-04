@@ -18,7 +18,7 @@ import { farmerMockData } from '@/data/mockData';
 import Button from '@/components/ui/Button';
 import Card from '@/components/ui/Card';
 import StatCard from '@/components/ui/StatCard';
-
+import { BarChart3, Sprout, DollarSign, Calendar } from "lucide-react";
 
 
 export default function FarmerDashboard() {
@@ -29,13 +29,12 @@ export default function FarmerDashboard() {
   const totalArea = crops.reduce((sum, crop) => sum + crop.area, 0);
   const activeCrops = crops.filter((c) => c.status === 'Growing').length;
   const avgHealth = Math.round(crops.reduce((sum, crop) => sum + (crop.health || 0), 0) / crops.length);
-
-  const tabs = [
-    { id: 'overview', label: 'Overview', icon: '📊' },
-    { id: 'crops', label: 'Crops', icon: '🌾' },
-    { id: 'expenses', label: 'Expenses & Profit', icon: '💰' },
-    { id: 'planning', label: 'Planning', icon: '📅' },
-  ];
+const tabs = [
+  { id: "overview", label: "Overview", icon: BarChart3 },
+  { id: "crops", label: "Crops", icon: Sprout },
+  { id: "expenses", label: "Expenses & Profit", icon: DollarSign },
+  { id: "planning", label: "Planning", icon: Calendar },
+];
 
   return (
     <div className="w-full ">
