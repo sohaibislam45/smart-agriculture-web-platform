@@ -32,7 +32,7 @@ export default function AdminOverviewPage() {
   if (loading) return <Loading message="Analyzing Harvest Data..." />;
 
   return (
-    <div className="p-4 md:p-8 space-y-8" style={{ backgroundColor: "var(--bg)" }}>
+    <div>
       {/* 1. Header with Quick Actions */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
