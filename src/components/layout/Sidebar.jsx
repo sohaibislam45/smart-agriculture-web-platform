@@ -12,9 +12,12 @@ import {
   CloudSun,
   MessageSquare,
   ShoppingCart,
+  LogOut,
+  ChevronRight,
 } from "lucide-react";
+import Logo from "../Logo";
 
-export default function Sidebar({ userRole = "admin" }) {
+export default function Sidebar({ userRole}) {
   const pathname = usePathname();
 
   const menuConfig = {
@@ -43,16 +46,24 @@ export default function Sidebar({ userRole = "admin" }) {
   const navItems = menuConfig[userRole] || [];
 
   return (
-    <aside className="sticky top-0 h-screen w-64 bg-white border-r border-gray-200 shadow-sm">
-      {/* Sidebar Label */}
-      <div className="p-6 border-b border-gray-100">
-        <p className="text-[10px] font-black tracking-[0.2em] uppercase opacity-40">
-          {userRole} Menu
-        </p>
+    <aside className="sticky top-0 h-screen w-72 bg-white border-r border-slate-100 flex flex-col transition-all duration-300">
+      <div className="hidden md:block px-8 py-7">
+        <Link href="/">
+          <Logo />
+        </Link>
+      </div>
+      {/* Role Badge Section */}
+      <div className="px-8 mb-6">
+        <div className="bg-slate-50 border border-slate-100 px-3 py-1.5 rounded-lg inline-flex items-center gap-2">
+          <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+          <span className="text-[10px] font-black uppercase tracking-widest text-slate-400">
+            {userRole} Menu
+          </span>
+        </div>
       </div>
 
       {/* Navigation */}
-      <nav className="flex-1 p-4 space-y-1 overflow-y-auto">
+      <nav className="flex-1 px-4 space-y-1.5 overflow-y-auto custom-scrollbar">
         {navItems.map((item) => {
           const Icon = item.icon;
           const isActive = pathname === item.href;
@@ -61,28 +72,57 @@ export default function Sidebar({ userRole = "admin" }) {
             <Link
               key={item.href}
               href={item.href}
-              className={`flex items-center gap-3 px-4 py-3 rounded-xl font-semibold transition-all ${
+              className={`group flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 ${
                 isActive
-                  ? "bg-green-700 text-white shadow-md"
-                  : "text-gray-700 hover:bg-green-50 hover:text-green-700"
+                  ? "bg-emerald-600 text-white shadow-lg shadow-emerald-200"
+                  : "text-slate-500 hover:bg-emerald-50 hover:text-emerald-700"
               }`}
             >
-              <Icon size={20} />
-              <span className="text-sm">{item.name}</span>
-              {isActive && (
-                <span className="ml-auto w-2 h-2 rounded-full bg-white" />
+              <div
+                className={`${isActive ? "text-white" : "text-slate-400 group-hover:text-emerald-600"}`}
+              >
+                <Icon size={18} strokeWidth={isActive ? 2.5 : 2} />
+              </div>
+
+              <span
+                className={`text-[13.5px] font-bold tracking-tight ${isActive ? "text-white" : "text-slate-600"}`}
+              >
+                {item.name}
+              </span>
+
+              {isActive ? (
+                <div className="ml-auto">
+                  <ChevronRight size={14} className="opacity-60" />
+                </div>
+              ) : (
+                <div className="ml-auto opacity-0 group-hover:opacity-100 transition-opacity">
+                  <div className="w-1 h-1 rounded-full bg-emerald-300" />
+                </div>
               )}
             </Link>
           );
         })}
       </nav>
 
-      {/* Footer */}
-      <div className="p-4 border-t border-gray-100">
-        <button className="w-full flex items-center gap-3 px-4 py-3 rounded-xl font-semibold text-red-600 hover:bg-red-50 transition-colors">
-          <span className="w-2 h-2 rounded-full bg-red-600" />
-          <span className="text-sm">Logout</span>
-        </button>
+      {/* Footer / Account Section */}
+      <div className="p-4 mt-auto">
+        <div className="bg-slate-50 border border-slate-100 rounded-2xl p-4 flex flex-col gap-3">
+          <div className="flex items-center gap-3">
+            <div className="w-8 h-8 rounded-full bg-slate-200 border-2 border-white shadow-sm overflow-hidden flex items-center justify-center text-[10px] font-black text-slate-500">
+              {userRole[0].toUpperCase()}
+            </div>
+            <div className="flex flex-col">
+              <span className="text-[9px] font-bold text-slate-400 mt-1">
+                {userRole}@smartagri.com
+              </span>
+            </div>
+          </div>
+
+          <button className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl font-bold text-rose-500 bg-rose-50 hover:bg-rose-100 transition-colors text-xs uppercase tracking-wider">
+            <LogOut size={14} />
+            Logout
+          </button>
+        </div>
       </div>
     </aside>
   );
