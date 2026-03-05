@@ -1,7 +1,13 @@
 'use client';
 
 import { createContext, useContext, useEffect, useState } from 'react';
+<<<<<<< HEAD
 import { useSession, signOut as nextAuthSignOut } from 'next-auth/react';
+=======
+
+import { useSession, signOut as nextAuthSignOut } from 'next-auth/react';
+
+>>>>>>> 972f96042db38cf9db8356a79e457133b9d42a58
 
 const AuthContext = createContext(null);
 
@@ -11,11 +17,15 @@ export function AuthProvider({ children }) {
   const [initialized, setInitialized] = useState(false);
   const [token, setToken]         = useState(null);
 
+<<<<<<< HEAD
   const { data: session, status: sessionStatus } = useSession();
 
   // ─── Effect 1: Resolve token from external systems ───────────────────────────
   // Reads from localStorage or NextAuth session (both are external systems).
   // Only responsible for setting `token` state — nothing else.
+=======
+  // Check user when app loads
+>>>>>>> 972f96042db38cf9db8356a79e457133b9d42a58
   useEffect(() => {
     if (sessionStatus === 'loading') return;
 
