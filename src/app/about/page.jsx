@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import {
@@ -11,23 +11,13 @@ import Header from "@/components/shared/Header";
 
 // ─── Tab data ─────────────────────────────────────────────────────────────────
 
-// ─── Resolve CSS variable accent (client-side only) ──────────────────────────
-function useAccent(tab) {
-  const [accent, setAccent] = useState("#2E7D32");
-  useEffect(() => {
-    const val = getComputedStyle(document.documentElement)
-      .getPropertyValue(tab.accentVar).trim();
-    if (val) setAccent(val);
-  }, [tab.accentVar]);
-  return { accent, accentLight: `${accent}${tab.accentAlpha}` };
-}
-
-// ─── Tab data ─────────────────────────────────────────────────────────────────
-
 const TABS = [
   {
-    id: "story", label: "Our Story", icon: Sprout,
-    accentVar: "--color-primary", accentAlpha: "18",
+    id: "story",
+    label: "Our Story",
+    icon: Sprout,
+    accent: "#16a34a",
+    accentLight: "#16a34a18",
     badge: "Since 2022",
     headline: "Rooted in the Fields of Bangladesh",
     subline: "How a simple question — 'why do farmers still lose crops?' — became a mission.",
@@ -40,8 +30,11 @@ const TABS = [
     stat: { value: "12,000+", label: "farmers in year one" },
   },
   {
-    id: "mission", label: "Mission", icon: Target,
-    accentVar: "--color-chart-2", accentAlpha: "22",
+    id: "mission",
+    label: "Mission",
+    icon: Target,
+    accent: "#2563eb",
+    accentLight: "#2563eb18",
     badge: "Why We Exist",
     headline: "Every Farmer Deserves Expert Guidance",
     subline: "Our mission is to close the knowledge gap between agricultural science and the farming community.",
@@ -54,8 +47,11 @@ const TABS = [
     stat: { value: "64", label: "districts in our target" },
   },
   {
-    id: "team", label: "Our Team", icon: Users,
-    accentVar: "--color-chart-3", accentAlpha: "22",
+    id: "team",
+    label: "Our Team",
+    icon: Users,
+    accent: "#d97706",
+    accentLight: "#d9770618",
     badge: "The People",
     headline: "Builders, Farmers & Scientists — Together",
     subline: "A multidisciplinary team united by respect for the land and the people who work it.",
@@ -68,8 +64,11 @@ const TABS = [
     stat: { value: "34", label: "team members across BD" },
   },
   {
-    id: "technology", label: "Technology", icon: Lightbulb,
-    accentVar: "--color-chart-4", accentAlpha: "22",
+    id: "technology",
+    label: "Technology",
+    icon: Lightbulb,
+    accent: "#7c3aed",
+    accentLight: "#7c3aed18",
     badge: "How It Works",
     headline: "Intelligence Built on Decades of Data",
     subline: "Cutting-edge models grounded in Bangladesh's agricultural realities — not imported assumptions.",
@@ -82,8 +81,11 @@ const TABS = [
     stat: { value: "1.2M", label: "DAE field reports indexed" },
   },
   {
-    id: "impact", label: "Impact", icon: Award,
-    accentVar: "--color-chart-5", accentAlpha: "22",
+    id: "impact",
+    label: "Impact",
+    icon: Award,
+    accent: "#dc2626",
+    accentLight: "#dc262618",
     badge: "Proof in the Field",
     headline: "Real Change, Measured Season by Season",
     subline: "Numbers mean nothing without the stories behind them. Here are both.",
@@ -96,7 +98,6 @@ const TABS = [
     stat: { value: "18%", label: "avg. yield increase, Boro '23" },
   },
 ];
-
 
 // ─── Floating leaves ──────────────────────────────────────────────────────────
 
@@ -226,8 +227,7 @@ function ParagraphBlock({ text, index }) {
 
 // ─── Stat pill ────────────────────────────────────────────────────────────────
 
-function StatPill({ tab }) {
-  const { accent, accentLight } = useAccent(tab);
+function StatPill({ value, label, accent, accentLight }) {
   return (
     <motion.div
       initial={{ opacity: 0, scale: 0.85 }}
@@ -243,9 +243,9 @@ function StatPill({ tab }) {
         className="text-2xl font-extrabold tracking-tight"
         style={{ color: accent }}
       >
-        {tab.stat.value}
+        {value}
       </motion.span>
-      <span className="text-sm text-muted-foreground font-medium">{tab.stat.label}</span>
+      <span className="text-sm text-muted-foreground font-medium">{label}</span>
     </motion.div>
   );
 }
@@ -254,7 +254,6 @@ function StatPill({ tab }) {
 
 function TabButton({ tab, isActive, onClick, index }) {
   const Icon = tab.icon;
-  const { accent, accentLight } = useAccent(tab);
   return (
     <motion.button
       initial={{ opacity: 0, y: -12 }}
@@ -266,19 +265,21 @@ function TabButton({ tab, isActive, onClick, index }) {
       className="relative flex items-center gap-2 px-4 py-3 rounded-xl text-sm font-semibold
         transition-colors whitespace-nowrap focus:outline-none"
       style={{
-        color:           isActive ? accent : undefined,
-        backgroundColor: isActive ? accentLight : "transparent",
+        color: isActive ? tab.accent : undefined,
+        backgroundColor: isActive ? tab.accentLight : "transparent",
       }}
     >
       <Icon size={15} />
       <span className="hidden sm:inline">{tab.label}</span>
       <span className="sm:hidden">{tab.label.split(" ")[0]}</span>
+
+      {/* Active underline bar */}
       <AnimatePresence>
         {isActive && (
           <motion.div
             layoutId="tab-underline"
             className="absolute bottom-0 left-3 right-3 h-0.5 rounded-full"
-            style={{ backgroundColor: accent }}
+            style={{ backgroundColor: tab.accent }}
             initial={{ scaleX: 0 }}
             animate={{ scaleX: 1 }}
             exit={{ scaleX: 0 }}
@@ -294,7 +295,6 @@ function TabButton({ tab, isActive, onClick, index }) {
 
 function ContentSection({ tab }) {
   const Icon = tab.icon;
-  const { accent, accentLight } = useAccent(tab);
 
   return (
     <motion.div
@@ -303,34 +303,36 @@ function ContentSection({ tab }) {
       animate={{ opacity: 1, y: 0, scale: 1 }}
       exit={{ opacity: 0, y: -20, scale: 0.97 }}
       transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
-      style={{ "--tab-accent": accent }}
+      style={{ "--tab-accent": tab.accent }}
     >
       {/* Section header */}
       <div className="flex items-start gap-4 mb-8">
+        {/* Big icon */}
         <motion.div
           initial={{ scale: 0, rotate: -20 }}
           animate={{ scale: 1, rotate: 0 }}
           transition={{ type: "spring", stiffness: 220, damping: 16, delay: 0.05 }}
           className="w-14 h-14 rounded-2xl flex items-center justify-center shrink-0 mt-1"
-          style={{ backgroundColor: accentLight, border: `1.5px solid ${accent}30` }}
+          style={{ backgroundColor: tab.accentLight, border: `1.5px solid ${tab.accent}30` }}
         >
-          <Icon size={26} style={{ color: accent }} />
+          <Icon size={26} style={{ color: tab.accent }} />
         </motion.div>
 
         <div className="flex-1 min-w-0">
+          {/* Badge */}
           <motion.span
             initial={{ opacity: 0, x: -10 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.08, duration: 0.35 }}
             className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold
               tracking-widest uppercase mb-3"
-            style={{ backgroundColor: accentLight, color: accent, border: `1px solid ${accent}25` }}
+            style={{ backgroundColor: tab.accentLight, color: tab.accent, border: `1px solid ${tab.accent}25` }}
           >
             <Zap size={10} />
             {tab.badge}
           </motion.span>
 
-          <AnimatedHeadline text={tab.headline} accent={accent} />
+          <AnimatedHeadline text={tab.headline} accent={tab.accent} />
 
           <motion.p
             initial={{ opacity: 0 }}
@@ -359,11 +361,10 @@ function ContentSection({ tab }) {
       </div>
 
       {/* Stat pill */}
-      <StatPill tab={tab} />
+      <StatPill value={tab.stat.value} label={tab.stat.label} accent={tab.accent} accentLight={tab.accentLight} />
     </motion.div>
   );
 }
-
 
 // ─── Main page ────────────────────────────────────────────────────────────────
 
@@ -373,7 +374,7 @@ export default function AboutPage() {
 
   return (
     <div className="min-h-screen bg-background">
-      <Header></Header>
+        <Header></Header>
       {/* Banner */}
       <PageBanner />
 
@@ -417,7 +418,7 @@ export default function AboutPage() {
             flex items-center justify-center gap-1.5"
         >
           <Sprout size={12} className="text-primary" />
-          SmartAgri — Empowering Bangladesh's farmers with precision agriculture.
+          SmartAgri — Empowering Bangladesh&apos;s farmers with precision agriculture.
         </motion.p>
       </div>
     </div>

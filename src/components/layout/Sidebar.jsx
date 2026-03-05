@@ -11,11 +11,16 @@ import {
   Calculator,
   CloudSun,
   MessageSquare,
-  ShoppingCart
+  ShoppingCart,
+  LogOut,
+  ChevronRight,
 } from "lucide-react";
 
 export default function Sidebar({ userRole = "admin" }) {
 
+import Logo from "../Logo";
+
+export default function Sidebar({ userRole}) {
   const pathname = usePathname();
 
   const menuConfig = {
@@ -29,9 +34,9 @@ export default function Sidebar({ userRole = "admin" }) {
       { name: "AI Chatbot", href: "/farmer/ai-chat", icon: MessageSquare },
     ],
     buyer: [
-      { name: "Dashboard", href: "/buyer/dashboard", icon: LayoutDashboard },
+      { name: "Dashboard", href: "/buyer", icon: LayoutDashboard },
       { name: "Browse Crops", href: "/buyer/crops", icon: Sprout },
-      { name: "My Purchases", href: "/buyer/purchases", icon: ShoppingCart },
+      { name: "My Orders", href: "/buyer/orders", icon: ShoppingCart },
     ],
     admin: [
       { name: "Dashboard", href: "/admin", icon: LayoutDashboard },
@@ -44,51 +49,24 @@ export default function Sidebar({ userRole = "admin" }) {
   const navItems = menuConfig[userRole] || [];
 
   return (
-
-    <div className="min-h-screen bg-base-200 max-w-7xl mx-auto">
-    <aside >
-      <nav className="space-y-2">
-        {/* Navigation items based on user role */}
-        {userRole === 'farmer' && (
-          <>
-            <a href="/farmer/dashboard" className="block p-2 hover:bg-gray-100 rounded">Dashboard</a>
-            <a href="/farmer/crops" className="block p-2 hover:bg-gray-100 rounded">My Crops</a>
-            <a href="/farmer/expenses" className="block p-2 hover:bg-gray-100 rounded">Expenses</a>
-            <a href="/farmer/planner" className="block p-2 hover:bg-gray-100 rounded">Farm Planner</a>
-             <a href="/farmer/calculator" className="block p-2 hover:bg-gray-100 rounded">Calculator</a>
-            <a href="/farmer/weather" className="block p-2 hover:bg-gray-100 rounded">Weather</a>
-            <a href="/farmer/ai-chat" className="block p-2 hover:bg-gray-100 rounded">Smart Ai  Chatbot</a>
-          </>
-        )}
-        {userRole === 'buyer' && (
-          <>
-            <a href="/buyer/dashboard" className="block p-2 hover:bg-gray-100 rounded">Dashboard</a>
-            <a href="/buyer/crops" className="block p-2 hover:bg-gray-100 rounded">Browse Crops</a>
-            <a href="/buyer/purchases" className="block p-2 hover:bg-gray-100 rounded">My Purchases</a>
-          </>
-        )}
-        {userRole === 'admin' && (
-          <>
-            <a href="/admin/dashboard" className="block p-2 hover:bg-gray-100 rounded">Dashboard</a>
-            <a href="/admin/users" className="block p-2 hover:bg-gray-100 rounded">Users</a>
-            <a href="/admin/analytics" className="block p-2 hover:bg-gray-100 rounded">Analytics</a>
-          </>
-        )}
-      </nav>
-    </aside>
-   
-    <div className="flex flex-col h-screen sticky top-0 bg-white border-r border-gray-100 shadow-sm">
-      {/* Sidebar Label */}
-      <div className="p-6 border-b border-gray-50">
-        <p
-          className="text-[10px] font-black tracking-[0.2em] uppercase opacity-40"
-          style={{ color: "var(--accent)" }}
-        >
-          {userRole} Menu
-        </p>
+    <aside className="sticky top-0 h-screen w-72 bg-white border-r border-slate-100 flex flex-col transition-all duration-300">
+      <div className="hidden md:block px-8 py-7">
+        <Link href="/">
+          <Logo />
+        </Link>
+      </div>
+      {/* Role Badge Section */}
+      <div className="px-8 mb-6">
+        <div className="bg-slate-50 border border-slate-100 px-3 py-1.5 rounded-lg inline-flex items-center gap-2">
+          <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+          <span className="text-[10px] font-black uppercase tracking-widest text-slate-400">
+            {userRole} Menu
+          </span>
+        </div>
       </div>
 
-      <nav className="flex-1 p-4 space-y-1 overflow-y-auto custom-scrollbar">
+      {/* Navigation */}
+      <nav className="flex-1 px-4 space-y-1.5 overflow-y-auto custom-scrollbar">
         {navItems.map((item) => {
 
           const isActive = pathname.startsWith(item.href);
@@ -97,15 +75,11 @@ export default function Sidebar({ userRole = "admin" }) {
             <Link
               key={item.href}
               href={item.href}
-              className={`flex items-center gap-3 px-4 py-3 rounded-xl font-bold transition-all duration-200 group ${
+              className={`group flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 ${
                 isActive
-                  ? "shadow-md translate-x-1"
-                  : "hover:bg-[var(--bg)] hover:translate-x-1"
+                  ? "bg-emerald-600 text-white shadow-lg shadow-emerald-200"
+                  : "text-slate-500 hover:bg-emerald-50 hover:text-emerald-700"
               }`}
-              style={{
-                backgroundColor: isActive ? "var(--primary)" : "transparent",
-                color: isActive ? "white" : "var(--text-secondary)",
-              }}
             >
               <item.icon
                 size={20}
@@ -133,8 +107,8 @@ export default function Sidebar({ userRole = "admin" }) {
           <div className="w-2 h-2 rounded-full bg-red-500" />
           <span className="text-sm uppercase tracking-widest font-black">
             Logout
-          </span>
-        </button>
+          </button>
+        </div>
       </div>
 
     </div>
