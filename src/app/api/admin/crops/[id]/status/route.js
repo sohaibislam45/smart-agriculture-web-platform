@@ -10,20 +10,25 @@ export async function PATCH(req, context) {
     if (role !== "admin") {
       return Response.json(
         { success: false, message: "Forbidden (admin only)" },
-        { status: 403 },
+        { status: 403 }
       );
     }
 
-    const { id } = await context.params;
-    const { status } = await req.json();
+    const id = context?.params?.id; // ✅ safest way
+    if (!id || !ObjectId.isValid(id)) {
+      return Response.json(
+        { success: false, message: "Invalid crop id" },
+        { status: 400 }
+      );
+    }
+
+    const body = await req.json();
+    const status = body?.status;
 
     if (!status || !allowedStatus.includes(status)) {
       return Response.json(
-        {
-          success: false,
-          message: `status must be one of: ${allowedStatus.join(", ")}`,
-        },
-        { status: 400 },
+        { success: false, message: `status must be one of: ${allowedStatus.join(", ")}` },
+        { status: 400 }
       );
     }
 
@@ -32,13 +37,13 @@ export async function PATCH(req, context) {
     const result = await cropsCol.findOneAndUpdate(
       { _id: new ObjectId(id) },
       { $set: { status, updatedAt: new Date() } },
-      { returnDocument: "after" },
+      { returnDocument: "after" }
     );
 
     if (!result.value) {
       return Response.json(
         { success: false, message: "Crop not found" },
-        { status: 404 },
+        { status: 404 }
       );
     }
 
@@ -46,7 +51,7 @@ export async function PATCH(req, context) {
   } catch (error) {
     return Response.json(
       { success: false, message: error.message },
-      { status: 500 },
+      { status: 500 }
     );
   }
 }
