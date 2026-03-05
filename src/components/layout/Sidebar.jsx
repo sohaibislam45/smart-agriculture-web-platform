@@ -12,16 +12,22 @@ import {
   CloudSun,
   MessageSquare,
   ShoppingCart,
+  LogOut,
+  ChevronRight,
 } from "lucide-react";
 
 export default function Sidebar({ userRole = "admin" }) {
+
+import Logo from "../Logo";
+
+export default function Sidebar({ userRole}) {
   const pathname = usePathname();
 
   const menuConfig = {
     farmer: [
-      { name: "Dashboard", href: "/farmer", icon: LayoutDashboard },
-      { name: "My Crops", href: "/farmer/crops", icon: Sprout },
-      { name: "Expenses", href: "/farmer/expenses", icon: Wallet },
+      { name: "Dashboard", href: "/farmer/dashboard", icon: LayoutDashboard },
+      { name: "Add Crops", href: "/farmer/add-product", icon: Sprout },
+      { name: "Manage Corps", href: "/farmer/manage-products", icon: Wallet },
       { name: "Farm Planner", href: "/farmer/planner", icon: Calendar },
       { name: "Calculator", href: "/farmer/calculator", icon: Calculator },
       { name: "Weather", href: "/farmer/weather", icon: CloudSun },
@@ -43,47 +49,70 @@ export default function Sidebar({ userRole = "admin" }) {
   const navItems = menuConfig[userRole] || [];
 
   return (
-    <aside className="sticky top-0 h-screen w-64 bg-white border-r border-gray-200 shadow-sm">
-      {/* Sidebar Label */}
-      <div className="p-6 border-b border-gray-100">
-        <p className="text-[10px] font-black tracking-[0.2em] uppercase opacity-40">
-          {userRole} Menu
-        </p>
+    <aside className="sticky top-0 h-screen w-72 bg-white border-r border-slate-100 flex flex-col transition-all duration-300">
+      <div className="hidden md:block px-8 py-7">
+        <Link href="/">
+          <Logo />
+        </Link>
+      </div>
+      {/* Role Badge Section */}
+      <div className="px-8 mb-6">
+        <div className="bg-slate-50 border border-slate-100 px-3 py-1.5 rounded-lg inline-flex items-center gap-2">
+          <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+          <span className="text-[10px] font-black uppercase tracking-widest text-slate-400">
+            {userRole} Menu
+          </span>
+        </div>
       </div>
 
       {/* Navigation */}
-      <nav className="flex-1 p-4 space-y-1 overflow-y-auto">
+      <nav className="flex-1 px-4 space-y-1.5 overflow-y-auto custom-scrollbar">
         {navItems.map((item) => {
-          const Icon = item.icon;
-          const isActive = pathname === item.href;
+
+          const isActive = pathname.startsWith(item.href);
 
           return (
             <Link
               key={item.href}
               href={item.href}
-              className={`flex items-center gap-3 px-4 py-3 rounded-xl font-semibold transition-all ${
+              className={`group flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 ${
                 isActive
-                  ? "bg-green-700 text-white shadow-md"
-                  : "text-gray-700 hover:bg-green-50 hover:text-green-700"
+                  ? "bg-emerald-600 text-white shadow-lg shadow-emerald-200"
+                  : "text-slate-500 hover:bg-emerald-50 hover:text-emerald-700"
               }`}
             >
-              <Icon size={20} />
-              <span className="text-sm">{item.name}</span>
+              <item.icon
+                size={20}
+                className={
+                  isActive
+                    ? "text-white"
+                    : "group-hover:text-[var(--primary)] transition-colors"
+                }
+              />
+
+              <span className="text-sm tracking-tight">{item.name}</span>
+
               {isActive && (
-                <span className="ml-auto w-2 h-2 rounded-full bg-white" />
+                <div className="ml-auto w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
               )}
+
             </Link>
           );
         })}
       </nav>
 
-      {/* Footer */}
-      <div className="p-4 border-t border-gray-100">
-        <button className="w-full flex items-center gap-3 px-4 py-3 rounded-xl font-semibold text-red-600 hover:bg-red-50 transition-colors">
-          <span className="w-2 h-2 rounded-full bg-red-600" />
-          <span className="text-sm">Logout</span>
-        </button>
+      {/* Logout */}
+      <div className="p-4 border-t border-gray-50">
+        <button className="w-full flex items-center gap-3 px-4 py-3 rounded-xl font-bold text-red-500 hover:bg-red-50 transition-colors">
+          <div className="w-2 h-2 rounded-full bg-red-500" />
+          <span className="text-sm uppercase tracking-widest font-black">
+            Logout
+          </button>
+        </div>
       </div>
-    </aside>
+
+    </div>
+    </div>
+
   );
 }

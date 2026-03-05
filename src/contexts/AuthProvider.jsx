@@ -3,6 +3,7 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { useSession, signOut as nextAuthSignOut } from "next-auth/react";
 
+
 const AuthContext = createContext(null);
 
 export function AuthProvider({ children }) {
@@ -12,12 +13,7 @@ export function AuthProvider({ children }) {
   const [token, setToken] = useState(null);
   const [tokenResolved, setTokenResolved] = useState(false);
 
-  const { data: session, status: sessionStatus } = useSession();
-
-  // ─── Effect 1: Resolve token ─────────────────────────────────────────────────
-  // KEY FIX: Don't bail out entirely when sessionStatus === "loading".
-  // Instead, only wait for NextAuth if we might have an OAuth token.
-  // For credentials flow (localStorage), resolve immediately without waiting.
+  // Check user when app loads
   useEffect(() => {
     // OAuth flow: wait until NextAuth session is ready, then grab customToken
     if (sessionStatus === "loading") {
@@ -81,7 +77,7 @@ export function AuthProvider({ children }) {
         const data = await res.json();
 
         if (data.success) {
-          setUser(data.user);
+          setUser(data.user); // user contains role also
         } else {
           localStorage.removeItem("authToken");
           sessionStorage.removeItem("authToken");
@@ -152,6 +148,7 @@ export function AuthProvider({ children }) {
   );
 }
 
+// Custom hook
 export function useAuthContext() {
   return useContext(AuthContext);
 }
