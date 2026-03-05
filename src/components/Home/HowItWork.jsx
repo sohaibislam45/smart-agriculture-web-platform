@@ -17,7 +17,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useRef } from "react";
+import { Fragment, useRef } from "react";
 import { motion, useInView } from "framer-motion";
 import { Sprout, Brain, ShoppingBasket, ArrowUpRight, ArrowRight } from "lucide-react";
 
@@ -188,12 +188,12 @@ export default function HowItWorks() {
             {/* Steps + connectors */}
             <div className="flex flex-col lg:flex-row items-stretch gap-4 lg:gap-0 mb-12">
               {STEPS.map((step, i) => (
-                <>
+                <Fragment key={step.num}>
                   <StepCard key={step.num} step={step} index={i} inView={inView} />
                   {i < STEPS.length - 1 && (
                     <Connector key={`c-${i}`} inView={inView} delay={0.4 + i * 0.15} />
                   )}
-                </>
+                </Fragment>
               ))}
             </div>
 

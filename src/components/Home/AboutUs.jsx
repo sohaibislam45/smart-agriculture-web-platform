@@ -15,7 +15,14 @@
 import Image from "next/image";
 import { useRef } from "react";
 import { motion, useInView } from "framer-motion";
-import { Heart, Sprout, Users, Globe } from "lucide-react";
+import {
+  Heart,
+  Sprout,
+  Users,
+  Globe,
+  Handshake,
+  Microscope,
+} from "lucide-react";
 
 // ─── Impact numbers ───────────────────────────────────────────────────────────
 
@@ -49,10 +56,26 @@ const IMPACTS = [
 // ─── Values ───────────────────────────────────────────────────────────────────
 
 const VALUES = [
-  { emoji: "🌱", title: "Farmer First", desc: "Every feature is built with the farmer's livelihood in mind." },
-  { emoji: "🤝", title: "No Middlemen", desc: "We believe in fair, transparent, direct trade." },
-  { emoji: "🔬", title: "Science-Backed", desc: "All recommendations follow Bangladesh DAE guidelines." },
-  { emoji: "🌍", title: "Built for Bangladesh", desc: "Designed for local crops, districts, and agricultural seasons." },
+  {
+    icon: Sprout,
+    title: "Farmer First",
+    desc: "Every feature is built with the farmer's livelihood in mind.",
+  },
+  {
+    icon: Handshake,
+    title: "No Middlemen",
+    desc: "We believe in fair, transparent, direct trade.",
+  },
+  {
+    icon: Microscope,
+    title: "Science-Backed",
+    desc: "All recommendations follow Bangladesh DAE guidelines.",
+  },
+  {
+    icon: Globe,
+    title: "Built for Bangladesh",
+    desc: "Designed for local crops, districts, and agricultural seasons.",
+  },
 ];
 
 // ─── Main Component ───────────────────────────────────────────────────────────
@@ -65,7 +88,6 @@ export default function AboutUs() {
     <section ref={ref} className=" overflow-hidden py-24 lg:py-32">
       <div className="max-w-[1320px] mx-auto px-6 lg:px-10">
         <div className="grid lg:grid-cols-2 gap-14 lg:gap-20 items-center">
-
           {/* ── LEFT: Content ── */}
           <div>
             <motion.div
@@ -83,7 +105,11 @@ export default function AboutUs() {
             <motion.h2
               initial={{ opacity: 0, x: -30 }}
               animate={inView ? { opacity: 1, x: 0 } : {}}
-              transition={{ delay: 0.1, duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+              transition={{
+                delay: 0.1,
+                duration: 0.8,
+                ease: [0.22, 1, 0.36, 1],
+              }}
               className="text-4xl lg:text-5xl font-extrabold text-foreground
                 leading-tight tracking-tight mb-6"
             >
@@ -101,14 +127,15 @@ export default function AboutUs() {
               <p>
                 SmartAgri was born from a simple question — why do Bangladeshi
                 farmers, who grow food for 170 million people, earn so little
-                from their harvests while brokers and middlemen take the lion&apos;s share?
+                from their harvests while brokers and middlemen take the
+                lion&apos;s share?
               </p>
               <p>
                 We built a platform that cuts out the middleman entirely, puts
-                AI-powered tools in every farmer&apos;s hands, and connects agriculture
-                students with the field knowledge they need. Because the future of
-                Bangladesh&apos;s food security depends on empowering the people
-                who actually grow the food.
+                AI-powered tools in every farmer&apos;s hands, and connects
+                agriculture students with the field knowledge they need. Because
+                the future of Bangladesh&apos;s food security depends on
+                empowering the people who actually grow the food.
               </p>
             </motion.div>
 
@@ -119,23 +146,39 @@ export default function AboutUs() {
               transition={{ delay: 0.35, duration: 0.7 }}
               className="grid grid-cols-2 gap-3 mb-10"
             >
-              {VALUES.map((v, i) => (
-                <motion.div
-                  key={v.title}
-                  initial={{ opacity: 0, scale: 0.92 }}
-                  animate={inView ? { opacity: 1, scale: 1 } : {}}
-                  transition={{ delay: 0.4 + i * 0.08, duration: 0.5 }}
-                  className="bg-card border border-border rounded-2xl p-4
-                    hover:border-primary/30 hover:shadow-md transition-all duration-300 group"
-                >
-                  <span className="text-2xl mb-2 block">{v.emoji}</span>
-                  <h4 className="text-foreground font-bold text-sm mb-1
-                    group-hover:text-primary transition-colors duration-200">
-                    {v.title}
-                  </h4>
-                  <p className="text-muted-foreground text-xs leading-relaxed">{v.desc}</p>
-                </motion.div>
-              ))}
+              {VALUES.map((v, i) => {
+                const Icon = v.icon;
+
+                return (
+                  <motion.div
+                    key={v.title}
+                    initial={{ opacity: 0, scale: 0.92 }}
+                    animate={inView ? { opacity: 1, scale: 1 } : {}}
+                    transition={{ delay: 0.4 + i * 0.08, duration: 0.5 }}
+                    className="bg-card border border-border rounded-2xl p-4
+        hover:border-primary/30 hover:shadow-md transition-all duration-300 group"
+                  >
+                    <div
+                      className="w-9 h-9 rounded-xl bg-primary/10 
+        flex items-center justify-center mb-3
+        group-hover:scale-110 transition-transform duration-200"
+                    >
+                      <Icon size={18} className="text-primary" />
+                    </div>
+
+                    <h4
+                      className="text-foreground font-bold text-sm mb-1
+        group-hover:text-primary transition-colors duration-200"
+                    >
+                      {v.title}
+                    </h4>
+
+                    <p className="text-muted-foreground text-xs leading-relaxed">
+                      {v.desc}
+                    </p>
+                  </motion.div>
+                );
+              })}
             </motion.div>
 
             {/* Impact numbers */}
@@ -149,8 +192,10 @@ export default function AboutUs() {
                 const Icon = stat.icon;
                 return (
                   <div key={stat.label} className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-xl bg-primary/10
-                      flex items-center justify-center shrink-0">
+                    <div
+                      className="w-10 h-10 rounded-xl bg-primary/10
+                      flex items-center justify-center shrink-0"
+                    >
                       <Icon size={17} className="text-primary" />
                     </div>
                     <div>
@@ -160,7 +205,9 @@ export default function AboutUs() {
                       <p className="text-foreground font-semibold text-xs leading-tight">
                         {stat.label}
                       </p>
-                      <p className="text-muted-foreground text-xs">{stat.desc}</p>
+                      <p className="text-muted-foreground text-xs">
+                        {stat.desc}
+                      </p>
                     </div>
                   </div>
                 );
@@ -185,15 +232,21 @@ export default function AboutUs() {
                 sizes="(max-width: 1024px) 100vw, 50vw"
                 quality={90}
               />
-              <div className="absolute inset-0 bg-gradient-to-t
-                from-black/40 via-transparent to-transparent" />
+              <div
+                className="absolute inset-0 bg-gradient-to-t
+                from-black/40 via-transparent to-transparent"
+              />
             </div>
 
             {/* Overlapping smaller image — top right */}
             <motion.div
               initial={{ opacity: 0, scale: 0.85, y: 20 }}
               animate={inView ? { opacity: 1, scale: 1, y: 0 } : {}}
-              transition={{ delay: 0.6, duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+              transition={{
+                delay: 0.6,
+                duration: 0.8,
+                ease: [0.22, 1, 0.36, 1],
+              }}
               className="absolute -top-6 -right-6 w-48 h-48 lg:w-56 lg:h-56
                 rounded-2xl overflow-hidden border-4 border-background shadow-xl"
             >
@@ -211,14 +264,22 @@ export default function AboutUs() {
             <motion.div
               initial={{ opacity: 0, y: 30, scale: 0.9 }}
               animate={inView ? { opacity: 1, y: 0, scale: 1 } : {}}
-              transition={{ delay: 0.8, duration: 0.7, type: "spring", stiffness: 120 }}
+              transition={{
+                delay: 0.8,
+                duration: 0.7,
+                type: "spring",
+                stiffness: 120,
+              }}
               className="absolute -bottom-6 -left-6
                 bg-primary text-primary-foreground
                 rounded-2xl px-6 py-5 shadow-2xl max-w-[220px]"
             >
-              <p className="text-2xl font-extrabold leading-none mb-1">Our Mission</p>
+              <p className="text-2xl font-extrabold leading-none mb-1">
+                Our Mission
+              </p>
               <p className="text-primary-foreground/75 text-xs leading-relaxed">
-                Empower every Bangladeshi farmer with the tools, data, and connections they deserve.
+                Empower every Bangladeshi farmer with the tools, data, and
+                connections they deserve.
               </p>
             </motion.div>
 
@@ -231,7 +292,6 @@ export default function AboutUs() {
               }}
             />
           </motion.div>
-
         </div>
       </div>
     </section>
