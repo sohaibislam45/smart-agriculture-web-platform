@@ -30,12 +30,14 @@ export default function HomePage() {
       <StatsBar></StatsBar>
       <FarmerFeatures />
       <BuyerFeatures></BuyerFeatures>
+      <OurService></OurService>
       <HowItWork></HowItWork>
       <AIChatbotHighlight></AIChatbotHighlight>
       <PlannerHighlight></PlannerHighlight>
       <WeatherHighlight></WeatherHighlight>
       <StudentSection></StudentSection>
       <NewsTeaser></NewsTeaser>
+      <AboutUs></AboutUs>
       <CTASection></CTASection>
     </div>
   );

@@ -2,15 +2,10 @@
 
 /**
  * StatsBar
- * Sits directly below the HeroSection.
- *
- * Design rationale:
- * - hero-bg.jpg is a warm golden wheat sunset → this section uses a deep
- *   warm olive/earth tone to transition naturally from the hero's dark overlay
- *   into the lighter page sections below.
- * - Diagonal top clip visually "continues" the hero into this section.
- * - Highlight (golden yellow) accents echo the sunset warmth.
- * - Large numbers are the hero of each card — minimal decoration.
+ * Abstract CSS gradient background — no image dependency.
+ * Rich deep green mesh gradient with amber/gold light bleeds
+ * that echo the hero's warm sunset tones without repeating the image.
+ * Glass container floats over it with white divider lines.
  */
 
 import { useEffect, useRef, useState } from "react";
@@ -26,8 +21,7 @@ const STATS = [
     suffix: "+",
     label: "Farmers Joined",
     desc: "Across Bangladesh",
-    accent: "text-secondary",        // soft green
-    iconBg: "bg-secondary/20",
+    iconColor: "text-secondary",
   },
   {
     icon: ShoppingBasket,
@@ -35,8 +29,7 @@ const STATS = [
     suffix: "+",
     label: "Buyers Connected",
     desc: "Direct, no middlemen",
-    accent: "text-highlight",        // golden yellow — echoes hero sunset
-    iconBg: "bg-highlight/20",
+    iconColor: "text-highlight",
   },
   {
     icon: Brain,
@@ -44,8 +37,7 @@ const STATS = [
     suffix: "+",
     label: "AI Queries Answered",
     desc: "Smart recommendations",
-    accent: "text-secondary",
-    iconBg: "bg-secondary/20",
+    iconColor: "text-secondary",
   },
   {
     icon: MapPin,
@@ -53,14 +45,13 @@ const STATS = [
     suffix: "",
     label: "Districts Covered",
     desc: "Nationwide reach",
-    accent: "text-highlight",
-    iconBg: "bg-highlight/20",
+    iconColor: "text-highlight",
   },
 ];
 
 // ─── Animated Counter ─────────────────────────────────────────────────────────
 
-function AnimatedCounter({ value, suffix, accent }) {
+function AnimatedCounter({ value, suffix, color }) {
   const [count, setCount] = useState(0);
   const ref = useRef(null);
   const inView = useInView(ref, { once: true });
@@ -68,12 +59,12 @@ function AnimatedCounter({ value, suffix, accent }) {
   useEffect(() => {
     if (!inView) return;
     const totalSteps = 60;
-    const step = value / totalSteps;
+    const stepVal = value / totalSteps;
     const interval = 1800 / totalSteps;
     let current = 0;
 
     const timer = setInterval(() => {
-      current += step;
+      current += stepVal;
       if (current >= value) {
         setCount(value);
         clearInterval(timer);
@@ -86,7 +77,7 @@ function AnimatedCounter({ value, suffix, accent }) {
   }, [inView, value]);
 
   return (
-    <span ref={ref} className={`font-extrabold tracking-tight ${accent}`}>
+    <span ref={ref} className={`font-extrabold tracking-tight ${color}`}>
       {count.toLocaleString()}{suffix}
     </span>
   );
@@ -100,87 +91,102 @@ export default function StatsBar() {
 
   return (
     <section
-      className="relative bg-foreground overflow-hidden "
+      className="relative overflow-hidden"
       style={{
-        // Diagonal clip — top edge angles downward to "catch" the hero
         clipPath: "polygon(0 0, 100% 0, 100% 100%, 0 100%)",
-        paddingBottom: "5rem",
+        paddingBottom: "4rem",
+        // Rich deep green mesh gradient — distinct from hero, no image needed
+        background: `
+          radial-gradient(ellipse at 0% 50%, #1B5E20 0%, transparent 60%),
+          radial-gradient(ellipse at 100% 50%, #2E7D32 0%, transparent 55%),
+          radial-gradient(ellipse at 50% 100%, #FBC02D22 0%, transparent 50%),
+          radial-gradient(ellipse at 30% 0%, #66BB6A18 0%, transparent 45%),
+          linear-gradient(135deg, #0a2e0a 0%, #1a4a1a 50%, #0d3d0d 100%)
+        `,
       }}
     >
-      {/* ── Warm ambient glow echoing the golden hero ── */}
-      <div className="absolute top-0 left-1/3 w-125 h-40
-        bg-highlight/8 blur-3xl pointer-events-none" />
-      <div className="absolute bottom-0 right-1/4 w-96 h-32
-        bg-secondary/10 blur-3xl pointer-events-none" />
-
-      {/* ── Subtle dot texture ── */}
+      {/* Subtle dot texture */}
       <div
-        className="absolute inset-0 opacity-[0.025] pointer-events-none"
+        className="absolute inset-0 opacity-[0.03] pointer-events-none"
         style={{
           backgroundImage: `radial-gradient(circle, white 1px, transparent 1px)`,
           backgroundSize: "28px 28px",
         }}
       />
 
-      <div
-        ref={ref}
-        className="relative max-w-330 mx-auto px-6 lg:px-10 pt-16 pb-8"
-      >
-        {/* Section intro */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
+      {/* Warm amber glow at bottom — echoes hero sunset */}
+      <div className="absolute bottom-0 left-1/2 -translate-x-1/2
+        w-[500px] h-24 bg-highlight/10 blur-3xl pointer-events-none" />
+
+      {/* Content */}
+      <div ref={ref} className="relative z-10 max-w-[1320px] mx-auto px-6 lg:px-10 pt-14 pb-8">
+
+        {/* Label */}
+        <motion.p
+          initial={{ opacity: 0, y: 16 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6 }}
-          className="text-center mb-12"
+          className="text-center text-white/30 text-xs font-bold
+            tracking-[0.25em] uppercase mb-10"
         >
-          <p className="text-white/40 text-sm font-semibold tracking-[0.2em] uppercase">
-            Growing Together
-          </p>
-        </motion.div>
+          Growing Together
+        </motion.p>
 
-        {/* Stats grid */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-px bg-white/5 rounded-3xl overflow-hidden">
+        {/* Glass card container */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={inView ? { opacity: 1, y: 0 } : {}}
+          transition={{ delay: 0.1, duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+          className="grid grid-cols-2 lg:grid-cols-4
+            divide-y-2 lg:divide-y-0 lg:divide-x-2 divide-white/10
+            bg-white/[0.07] backdrop-blur-xl
+            border border-white/15
+            rounded-3xl overflow-hidden
+            shadow-2xl shadow-black/40"
+        >
           {STATS.map((stat, i) => {
             const Icon = stat.icon;
             return (
               <motion.div
                 key={stat.label}
-                initial={{ opacity: 0, y: 32 }}
+                initial={{ opacity: 0, y: 24 }}
                 animate={inView ? { opacity: 1, y: 0 } : {}}
                 transition={{
-                  delay: i * 0.1,
+                  delay: 0.2 + i * 0.1,
                   duration: 0.7,
                   ease: [0.22, 1, 0.36, 1],
                 }}
                 className="group flex flex-col items-center text-center
-                  px-6 py-10 bg-white/3 hover:bg-white/[0.07]
+                  px-6 py-10 hover:bg-white/[0.06]
                   transition-colors duration-300"
               >
-                {/* Icon pill */}
-                <div className={`w-11 h-11 rounded-2xl ${stat.iconBg}
+                {/* Icon */}
+                <div className="w-12 h-12 rounded-2xl
+                  bg-white/8 border border-white/10
                   flex items-center justify-center mb-5
-                  group-hover:scale-110 transition-transform duration-300`}
+                  group-hover:scale-110 group-hover:border-white/25
+                  transition-all duration-300"
                 >
-                  <Icon size={20} className={stat.accent} />
+                  <Icon size={22} className={stat.iconColor} />
                 </div>
 
-                {/* Big counter */}
+                {/* Counter */}
                 <p className="text-4xl xl:text-5xl mb-2 leading-none">
                   {inView
-                    ? <AnimatedCounter value={stat.value} suffix={stat.suffix} accent={stat.accent} />
-                    : <span className={`font-extrabold tracking-tight ${stat.accent}`}>0</span>
+                    ? <AnimatedCounter value={stat.value} suffix={stat.suffix} color={stat.iconColor} />
+                    : <span className={`font-extrabold tracking-tight ${stat.iconColor}`}>0</span>
                   }
                 </p>
 
                 {/* Label */}
-                <p className="text-white text-sm font-bold mb-1">{stat.label}</p>
+                <p className="text-white font-bold text-sm mb-1">{stat.label}</p>
 
-                {/* Description */}
+                {/* Desc */}
                 <p className="text-white/35 text-xs">{stat.desc}</p>
               </motion.div>
             );
           })}
-        </div>
+        </motion.div>
       </div>
     </section>
   );
