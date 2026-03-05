@@ -63,7 +63,7 @@ const PlaceOrderPage = () => {
       <button
         onClick={handlePlaceOrder}
         disabled={loading}
-        className="bg-[#2E7D32] text-white px-4 py-2 rounded hover:bg-blue-600"
+        className="bg-[#2E7D32] text-white px-4 py-2 rounded hover:bg-green-400"
       >
         {loading ? "Placing..." : "Place Order"}
       </button>

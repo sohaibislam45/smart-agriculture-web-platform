@@ -1,9 +1,9 @@
 "use client";
 
 const statusColors = {
-  pending: "bg-yellow-200 text-yellow-800",
+  pending: "bg-[#FBC02D] ",
   approved: "bg-blue-200 text-blue-800",
-  completed: "bg-green-200 text-green-800",
+  completed: "bg-[#145214] text-white",
 };
 
 const OrderStatusBadge = ({ status }) => {
