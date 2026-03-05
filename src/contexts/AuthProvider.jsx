@@ -1,13 +1,9 @@
 'use client';
 
 import { createContext, useContext, useEffect, useState } from 'react';
-<<<<<<< HEAD
-import { useSession, signOut as nextAuthSignOut } from 'next-auth/react';
-=======
 
 import { useSession, signOut as nextAuthSignOut } from 'next-auth/react';
 
->>>>>>> 972f96042db38cf9db8356a79e457133b9d42a58
 
 const AuthContext = createContext(null);
 
@@ -17,15 +13,7 @@ export function AuthProvider({ children }) {
   const [initialized, setInitialized] = useState(false);
   const [token, setToken]         = useState(null);
 
-<<<<<<< HEAD
-  const { data: session, status: sessionStatus } = useSession();
-
-  // ─── Effect 1: Resolve token from external systems ───────────────────────────
-  // Reads from localStorage or NextAuth session (both are external systems).
-  // Only responsible for setting `token` state — nothing else.
-=======
   // Check user when app loads
->>>>>>> 972f96042db38cf9db8356a79e457133b9d42a58
   useEffect(() => {
     if (sessionStatus === 'loading') return;
 
@@ -89,22 +77,31 @@ export function AuthProvider({ children }) {
     verify();
   }, [token, sessionStatus]);
 
-  // ─── Credentials login ────────────────────────────────────────────────────────
-  const login = async (email, password) => {
-    const res  = await fetch('/api/auth/login', {
+const login = async (email, password) => {
+  const res  = await fetch('/api/auth/login', {
+    method:  'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body:    JSON.stringify({ email, password }),
+  });
+  const data = await res.json();
+
+  if (data.success) {
+    localStorage.setItem('authToken', data.token);
+    
+    // ← Explicitly sync cookie (don't rely on login API response alone)
+    await fetch('/api/auth/set-cookie', {
       method:  'POST',
       headers: { 'Content-Type': 'application/json' },
-      body:    JSON.stringify({ email, password }),
+      body:    JSON.stringify({ token: data.token }),
     });
-    const data = await res.json();
 
-    if (data.success) {
-      localStorage.setItem('authToken', data.token);
-      setToken(data.token);
-      setUser(data.user);
-      return { success: true, role: data.user.role };
-    }
-  };
+    setToken(data.token);
+    setUser(data.user);
+    return { success: true, role: data.user.role };
+  }
+
+  return { success: false, error: data.error };
+};
 
   // ─── Unified logout (credentials + OAuth) ────────────────────────────────────
   const logout = async () => {
@@ -128,7 +125,7 @@ export function AuthProvider({ children }) {
 
   return (
     <AuthContext.Provider value={{ user, loading, login, logout }}>
-      {initialized ? children : null}
+      {children }
     </AuthContext.Provider>
   );
 }
