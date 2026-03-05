@@ -3,6 +3,7 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { useSession, signOut as nextAuthSignOut } from "next-auth/react";
 
+
 const AuthContext = createContext(null);
 
 export function AuthProvider({ children }) {
@@ -12,11 +13,7 @@ export function AuthProvider({ children }) {
   const [token, setToken] = useState(null);
   const [tokenResolved, setTokenResolved] = useState(false);
 
-  const { data: session, status: sessionStatus } = useSession();
-
-  // ─── Effect 1: Resolve token from external systems ───────────────────────────
-  // Reads from localStorage or NextAuth session (both are external systems).
-  // Only responsible for setting `token` state — nothing else.
+  // Check user when app loads
   useEffect(() => {
     if (sessionStatus === "loading") return;
 
@@ -64,7 +61,7 @@ export function AuthProvider({ children }) {
         const data = await res.json();
 
         if (data.success) {
-          setUser(data.user);
+          setUser(data.user); // user contains role also
         } else {
           localStorage.removeItem("authToken");
           sessionStorage.removeItem("authToken");
@@ -135,6 +132,7 @@ export function AuthProvider({ children }) {
   );
 }
 
+// Custom hook
 export function useAuthContext() {
   return useContext(AuthContext);
 }
